@@ -1,21 +1,19 @@
 export async function onRequestGet(context) {
-  const host = context.request.headers.get("host") || "example.com";
-
-  let sitemapList = "";
-  for (let i = 51; i <= 100; i++) {
-    const num = String(i).padStart(2, "0"); // jadi 01, 02, 03
-    sitemapList += `Sitemap: https://${host}/sitemap/01/sitemap${num}.xml\n`;
-  }
-
+  const host = context.request.headers.get("host");
+  
   const body = `User-agent: *
 Allow: /
 
-${sitemapList}`;
+Sitemap: https://${host}/sitemap/01/sitemap34.xml
+
+`;
 
   return new Response(body, {
     headers: {
       "Content-Type": "text/plain; charset=UTF-8",
-      "Cache-Control": "no-cache"
+      "Cache-Control": "no-cache, no-store, must-revalidate",
+      "Pragma": "no-cache",
+      "Expires": "0"
     }
   });
 }
