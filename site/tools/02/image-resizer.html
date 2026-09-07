@@ -1,0 +1,110 @@
+---
+layout: null
+permalink: /site/tools/02/designer/image-resizer.html
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Resizer</title>
+    <meta name="description" content="Resize images in your browser.">
+    <link rel="stylesheet" href="/site/tools/02/style.css">
+    <script src="/site/tools/02/config.js"></script>
+</head>
+<body data-page-name="Image Resizer" data-tool-id="image-resizer">
+    <div id="site-header"></div>
+    
+    <div class="layout">
+        <div id="site-sidebar"></div>
+        
+        <main class="main-content">
+            <div id="breadcrumb"></div>
+            
+            <div class="tool-page">
+                <h1>Image Resizer</h1>
+                <p class="tool-intro">Resize images in your browser. No upload to server.</p>
+                
+                <div class="tool-box">
+                    <label>Upload Image</label>
+                    <input type="file" id="imageInput" accept="image/*" onchange="loadImage(event)">
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1rem;">
+                        <div>
+                            <label>New Width</label>
+                            <input type="number" id="newWidth" value="800" oninput="resizeImage()">
+                        </div>
+                        <div>
+                            <label>New Height</label>
+                            <input type="number" id="newHeight" value="600" oninput="resizeImage()">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tool-box">
+                    <label>Preview</label>
+                    <div id="preview" style="text-align: center;">
+                        <canvas id="canvas" style="max-width: 100%; border-radius: 8px;"></canvas>
+                    </div>
+                    
+                    <div style="margin-top: 1rem;">
+                        <button class="btn btn-primary" onclick="downloadImage()">Download</button>
+                    </div>
+                </div>
+                
+                <div id="ad-content" class="ad-container"></div>
+                
+                <section class="content-section">
+                    <h2>Related Tools</h2>
+                    <div class="related-tools" id="related-tools"></div>
+                </section>
+            </div>
+        </main>
+    </div>
+    
+    <div id="site-footer"></div>
+    
+    <script>
+        let originalImage = null;
+        
+        function loadImage(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                originalImage = new Image();
+                originalImage.onload = function() {
+                    document.getElementById('newWidth').value = originalImage.width;
+                    document.getElementById('newHeight').value = originalImage.height;
+                    resizeImage();
+                };
+                originalImage.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+        
+        function resizeImage() {
+            if (!originalImage) return;
+            
+            const canvas = document.getElementById('canvas');
+            const ctx = canvas.getContext('2d');
+            
+            const w = parseInt(document.getElementById('newWidth').value) || 100;
+            const h = parseInt(document.getElementById('newHeight').value) || 100;
+            
+            canvas.width = w;
+            canvas.height = h;
+            ctx.drawImage(originalImage, 0, 0, w, h);
+        }
+        
+        function downloadImage() {
+            const canvas = document.getElementById('canvas');
+            const link = document.createElement('a');
+            link.download = 'resized-image.png';
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        }
+    </script>
+</body>
+</html>

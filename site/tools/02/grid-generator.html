@@ -1,0 +1,112 @@
+---
+layout: null
+permalink: /site/tools/02/designer/grid-generator.html
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS Grid Generator</title>
+    <meta name="description" content="Visual CSS Grid layout generator.">
+    <link rel="stylesheet" href="/site/tools/02/style.css">
+    <script src="/site/tools/02/config.js"></script>
+</head>
+<body data-page-name="Grid Generator" data-tool-id="grid-generator">
+    <div id="site-header"></div>
+    
+    <div class="layout">
+        <div id="site-sidebar"></div>
+        
+        <main class="main-content">
+            <div id="breadcrumb"></div>
+            
+            <div class="tool-page">
+                <h1>CSS Grid Generator</h1>
+                <p class="tool-intro">Visual CSS Grid layout generator.</p>
+                
+                <div class="tool-box">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div>
+                            <label>Columns</label>
+                            <input type="number" id="columns" value="3" min="1" max="12" oninput="updateGrid()">
+                        </div>
+                        <div>
+                            <label>Rows</label>
+                            <input type="number" id="rows" value="3" min="1" max="12" oninput="updateGrid()">
+                        </div>
+                        <div>
+                            <label>Column Gap</label>
+                            <input type="range" id="colGap" min="0" max="50" value="10" oninput="updateGrid()">
+                            <span id="colGapVal">10</span>px
+                        </div>
+                        <div>
+                            <label>Row Gap</label>
+                            <input type="range" id="rowGap" min="0" max="50" value="10" oninput="updateGrid()">
+                            <span id="rowGapVal">10</span>px
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tool-box">
+                    <div id="preview" style="display: grid; gap: 10px; min-height: 200px;">
+                        <div style="background: var(--primary); border-radius: 4px;"></div>
+                        <div style="background: var(--primary); border-radius: 4px;"></div>
+                        <div style="background: var(--primary); border-radius: 4px;"></div>
+                        <div style="background: var(--primary); border-radius: 4px;"></div>
+                        <div style="background: var(--primary); border-radius: 4px;"></div>
+                        <div style="background: var(--primary); border-radius: 4px;"></div>
+                        <div style="background: var(--primary); border-radius: 4px;"></div>
+                        <div style="background: var(--primary); border-radius: 4px;"></div>
+                        <div style="background: var(--primary); border-radius: 4px;"></div>
+                    </div>
+                </div>
+                
+                <div class="tool-box">
+                    <label>CSS Code</label>
+                    <div class="output-box" id="cssOutput">-</div>
+                    <button class="btn btn-copy" onclick="copyCSS()">Copy CSS</button>
+                </div>
+                
+                <div id="ad-content" class="ad-container"></div>
+                
+                <section class="content-section">
+                    <h2>Related Tools</h2>
+                    <div class="related-tools" id="related-tools"></div>
+                </section>
+            </div>
+        </main>
+    </div>
+    
+    <div id="site-footer"></div>
+    
+    <script>
+        function updateGrid() {
+            const cols = document.getElementById('columns').value;
+            const rows = document.getElementById('rows').value;
+            const cg = document.getElementById('colGap').value;
+            const rg = document.getElementById('rowGap').value;
+            
+            document.getElementById('colGapVal').textContent = cg;
+            document.getElementById('rowGapVal').textContent = rg;
+            
+            const preview = document.getElementById('preview');
+            preview.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
+            preview.style.gridTemplateRows = `repeat(${rows}, 1fr)`;
+            preview.style.columnGap = `${cg}px`;
+            preview.style.rowGap = `${rg}px`;
+            
+            document.getElementById('cssOutput').textContent = 
+                `display: grid;\ngrid-template-columns: repeat(${cols}, 1fr);\ngrid-template-rows: repeat(${rows}, 1fr);\ngap: ${rg}px ${cg}px;`;
+        }
+        
+        function copyCSS() {
+            const t = document.getElementById('cssOutput').textContent;
+            if (t === '-') { alert('Generate first.'); return; }
+            navigator.clipboard.writeText(t).then(() => alert('Copied!'));
+        }
+        
+        updateGrid();
+    </script>
+</body>
+</html>

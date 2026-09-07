@@ -1,0 +1,84 @@
+---
+layout: null
+permalink: /site/tools/02/developer/base64-encoder.html
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Base64 Encoder</title>
+    <meta name="description" content="Encode or decode Base64 strings.">
+    <link rel="stylesheet" href="/site/tools/02/style.css">
+    <script src="/site/tools/02/config.js"></script>
+</head>
+<body data-page-name="Base64 Encoder" data-tool-id="base64-image">
+    <div id="site-header"></div>
+    
+    <div class="layout">
+        <div id="site-sidebar"></div>
+        
+        <main class="main-content">
+            <div id="breadcrumb"></div>
+            
+            <div class="tool-page">
+                <h1>Base64 Encoder</h1>
+                <p class="tool-intro">Encode or decode Base64 strings.</p>
+                
+                <div class="tool-box">
+                    <label>Input</label>
+                    <textarea id="input" placeholder="Type or paste text here..."></textarea>
+                    
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 0.8rem;">
+                        <button class="btn btn-primary" onclick="encode()">Encode</button>
+                        <button class="btn btn-secondary" onclick="decode()">Decode</button>
+                        <button class="btn btn-copy" onclick="copyResult()">Copy</button>
+                        <button class="btn btn-secondary" onclick="clearAll()">Clear</button>
+                    </div>
+                </div>
+                
+                <div class="tool-box">
+                    <label>Output</label>
+                    <div class="output-box" id="output">-</div>
+                </div>
+                
+                <div id="ad-content" class="ad-container"></div>
+                
+                <section class="content-section">
+                    <h2>Related Tools</h2>
+                    <div class="related-tools" id="related-tools"></div>
+                </section>
+            </div>
+        </main>
+    </div>
+    
+    <div id="site-footer"></div>
+    
+    <script>
+        function encode() {
+            const t = document.getElementById('input').value;
+            if (!t) { alert('Enter text first.'); return; }
+            try { document.getElementById('output').textContent = btoa(t); }
+            catch(e) { alert('Error: ' + e.message); }
+        }
+        
+        function decode() {
+            const t = document.getElementById('input').value.trim();
+            if (!t) { alert('Enter Base64 first.'); return; }
+            try { document.getElementById('output').textContent = atob(t); }
+            catch(e) { alert('Invalid Base64.'); }
+        }
+        
+        function copyResult() {
+            const t = document.getElementById('output').textContent;
+            if (t === '-') { alert('No result.'); return; }
+            navigator.clipboard.writeText(t).then(() => alert('Copied!'));
+        }
+        
+        function clearAll() {
+            document.getElementById('input').value = '';
+            document.getElementById('output').textContent = '-';
+        }
+    </script>
+</body>
+</html>

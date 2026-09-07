@@ -1,0 +1,94 @@
+---
+layout: null
+permalink: /site/tools/02/developer/ts-js.html
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TypeScript to JavaScript</title>
+    <meta name="description" content="Basic TypeScript to JavaScript conversion (remove types).">
+    <link rel="stylesheet" href="/site/tools/02/style.css">
+    <script src="/site/tools/02/config.js"></script>
+</head>
+<body data-page-name="TS to JS" data-tool-id="ts-js">
+    <div id="site-header"></div>
+    
+    <div class="layout">
+        <div id="site-sidebar"></div>
+        
+        <main class="main-content">
+            <div id="breadcrumb"></div>
+            
+            <div class="tool-page">
+                <h1>TypeScript to JavaScript</h1>
+                <p class="tool-intro">Remove TypeScript type annotations.</p>
+                
+                <div class="tool-box">
+                    <label>TypeScript Code</label>
+                    <textarea id="tsInput" placeholder="Paste TypeScript here..." style="font-family: monospace;"></textarea>
+                    
+                    <div style="margin-top: 0.8rem;">
+                        <button class="btn btn-primary" onclick="convert()">Convert</button>
+                        <button class="btn btn-copy" onclick="copyResult()">Copy</button>
+                        <button class="btn btn-secondary" onclick="clearAll()">Clear</button>
+                        <button class="btn btn-secondary" onclick="sampleTS()">Sample</button>
+                    </div>
+                </div>
+                
+                <div class="tool-box">
+                    <label>JavaScript Output</label>
+                    <div class="output-box" id="jsOutput">-</div>
+                </div>
+                
+                <div id="ad-content" class="ad-container"></div>
+                
+                <section class="content-section">
+                    <h2>Related Tools</h2>
+                    <div class="related-tools" id="related-tools"></div>
+                </section>
+            </div>
+        </main>
+    </div>
+    
+    <div id="site-footer"></div>
+    
+    <script>
+        function convert() {
+            let ts = document.getElementById('tsInput').value;
+            if (!ts.trim()) { alert('Paste TS first.'); return; }
+            
+            // Remove interface declarations
+            ts = ts.replace(/interface\s+\w+\s*{[\s\S]*?}/g, '');
+            
+            // Remove type annotations
+            ts = ts.replace(/:\s*(string|number|boolean|void|any|unknown|never|object|[A-Z]\w*(\[\])?)(\s*=\s*[^,;]+)?/g, '');
+            
+            // Remove generic types
+            ts = ts.replace(/<[A-Z]\w*(\[\])?>/g, '');
+            
+            // Remove export/import type
+            ts = ts.replace(/\b(public|private|protected|readonly)\s+/g, '');
+            
+            document.getElementById('jsOutput').textContent = ts.trim();
+        }
+        
+        function copyResult() {
+            const t = document.getElementById('jsOutput').textContent;
+            if (t === '-') { alert('Convert first.'); return; }
+            navigator.clipboard.writeText(t).then(() => alert('Copied!'));
+        }
+        
+        function clearAll() {
+            document.getElementById('tsInput').value = '';
+            document.getElementById('jsOutput').textContent = '-';
+        }
+        
+        function sampleTS() {
+            document.getElementById('tsInput').value = 'interface User {\n  name: string;\n  age: number;\n}\n\nfunction greet(user: User): string {\n  return `Hello ${user.name}`;\n}\n\nconst user: User = { name: "John", age: 30 };\nconsole.log(greet(user));';
+            convert();
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,127 @@
+---
+layout: null
+permalink: /site/tools/02/developer/xml-json.html
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XML to JSON Converter</title>
+    <meta name="description" content="Convert between XML and JSON formats.">
+    <link rel="stylesheet" href="/site/tools/02/style.css">
+    <script src="/site/tools/02/config.js"></script>
+</head>
+<body data-page-name="XML to JSON" data-tool-id="xml-json">
+    <div id="site-header"></div>
+    
+    <div class="layout">
+        <div id="site-sidebar"></div>
+        
+        <main class="main-content">
+            <div id="breadcrumb"></div>
+            
+            <div class="tool-page">
+                <h1>XML to JSON Converter</h1>
+                <p class="tool-intro">Convert between XML and JSON formats.</p>
+                
+                <div class="tool-box">
+                    <label>XML Input</label>
+                    <textarea id="xmlInput" placeholder="Paste XML here..." style="font-family: monospace;"></textarea>
+                    
+                    <div style="margin-top: 0.8rem;">
+                        <button class="btn btn-primary" onclick="convert()">Convert to JSON</button>
+                        <button class="btn btn-copy" onclick="copyResult()">Copy</button>
+                        <button class="btn btn-secondary" onclick="clearAll()">Clear</button>
+                        <button class="btn btn-secondary" onclick="sampleXML()">Sample</button>
+                    </div>
+                </div>
+                
+                <div class="tool-box">
+                    <label>JSON Output</label>
+                    <div class="output-box" id="jsonOutput">-</div>
+                </div>
+                
+                <div id="ad-content" class="ad-container"></div>
+                
+                <section class="content-section">
+                    <h2>Related Tools</h2>
+                    <div class="related-tools" id="related-tools"></div>
+                </section>
+            </div>
+        </main>
+    </div>
+    
+    <div id="site-footer"></div>
+    
+    <script>
+        function xmlToJson(xml) {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(xml, 'text/xml');
+            
+            if (doc.querySelector('parsererror')) {
+                throw new Error('Invalid XML');
+            }
+            
+            function parseNode(node) {
+                if (node.nodeType === 3) return node.textContent.trim();
+                if (node.nodeType !== 1) return null;
+                
+                const obj = {};
+                const children = node.children;
+                
+                if (children.length === 0) {
+                    return node.textContent.trim();
+                }
+                
+                for (const child of children) {
+                    const result = parseNode(child);
+                    const name = child.nodeName;
+                    
+                    if (obj[name] === undefined) {
+                        obj[name] = result;
+                    } else if (Array.isArray(obj[name])) {
+                        obj[name].push(result);
+                    } else {
+                        obj[name] = [obj[name], result];
+                    }
+                }
+                
+                return obj;
+            }
+            
+            const result = {};
+            result[doc.documentElement.nodeName] = parseNode(doc.documentElement);
+            return result;
+        }
+        
+        function convert() {
+            const xml = document.getElementById('xmlInput').value.trim();
+            if (!xml) { alert('Paste XML first.'); return; }
+            
+            try {
+                const json = xmlToJson(xml);
+                document.getElementById('jsonOutput').textContent = JSON.stringify(json, null, 2);
+            } catch(e) {
+                alert('Error: ' + e.message);
+            }
+        }
+        
+        function copyResult() {
+            const t = document.getElementById('jsonOutput').textContent;
+            if (t === '-') { alert('Convert first.'); return; }
+            navigator.clipboard.writeText(t).then(() => alert('Copied!'));
+        }
+        
+        function clearAll() {
+            document.getElementById('xmlInput').value = '';
+            document.getElementById('jsonOutput').textContent = '-';
+        }
+        
+        function sampleXML() {
+            document.getElementById('xmlInput').value = '<root><user><name>John</name><age>30</age></user><user><name>Jane</name><age>25</age></user></root>';
+            convert();
+        }
+    </script>
+</body>
+</html>

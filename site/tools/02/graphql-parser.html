@@ -1,0 +1,93 @@
+---
+layout: null
+permalink: /site/tools/02/developer/graphql-parser.html
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GraphQL Parser</title>
+    <meta name="description" content="Parse and format GraphQL queries.">
+    <link rel="stylesheet" href="/site/tools/02/style.css">
+    <script src="/site/tools/02/config.js"></script>
+</head>
+<body data-page-name="GraphQL Parser" data-tool-id="graphql-parser">
+    <div id="site-header"></div>
+    
+    <div class="layout">
+        <div id="site-sidebar"></div>
+        
+        <main class="main-content">
+            <div id="breadcrumb"></div>
+            
+            <div class="tool-page">
+                <h1>GraphQL Parser</h1>
+                <p class="tool-intro">Parse and format GraphQL queries.</p>
+                
+                <div class="tool-box">
+                    <label>GraphQL Query</label>
+                    <textarea id="gqlInput" placeholder="Paste GraphQL query here..." style="font-family: monospace;"></textarea>
+                    
+                    <div style="margin-top: 0.8rem;">
+                        <button class="btn btn-primary" onclick="parseGQL()">Parse</button>
+                        <button class="btn btn-copy" onclick="copyResult()">Copy</button>
+                        <button class="btn btn-secondary" onclick="clearAll()">Clear</button>
+                        <button class="btn btn-secondary" onclick="sampleGQL()">Sample</button>
+                    </div>
+                </div>
+                
+                <div class="tool-box">
+                    <label>Fields Found</label>
+                    <div class="output-box" id="gqlOutput">-</div>
+                </div>
+                
+                <div id="ad-content" class="ad-container"></div>
+                
+                <section class="content-section">
+                    <h2>Related Tools</h2>
+                    <div class="related-tools" id="related-tools"></div>
+                </section>
+            </div>
+        </main>
+    </div>
+    
+    <div id="site-footer"></div>
+    
+    <script>
+        function parseGQL() {
+            const query = document.getElementById('gqlInput').value.trim();
+            if (!query) { alert('Paste GraphQL first.'); return; }
+            
+            const fields = [];
+            const fieldRegex = /^(\s*)([\w]+)(\([^)]*\))?\s*{?/gm;
+            let match;
+            
+            while ((match = fieldRegex.exec(query)) !== null) {
+                if (match[2] && !['query', 'mutation', 'subscription', 'fragment', 'on'].includes(match[2])) {
+                    const indent = match[1].length;
+                    fields.push(`${'  '.repeat(indent / 2)}${match[2]}`);
+                }
+            }
+            
+            document.getElementById('gqlOutput').textContent = fields.join('\n') || 'No fields found';
+        }
+        
+        function copyResult() {
+            const t = document.getElementById('gqlOutput').textContent;
+            if (t === '-') { alert('Parse first.'); return; }
+            navigator.clipboard.writeText(t).then(() => alert('Copied!'));
+        }
+        
+        function clearAll() {
+            document.getElementById('gqlInput').value = '';
+            document.getElementById('gqlOutput').textContent = '-';
+        }
+        
+        function sampleGQL() {
+            document.getElementById('gqlInput').value = 'query GetUser($id: ID!) {\n  user(id: $id) {\n    id\n    name\n    email\n    posts {\n      title\n      content\n    }\n  }\n}';
+            parseGQL();
+        }
+    </script>
+</body>
+</html>
