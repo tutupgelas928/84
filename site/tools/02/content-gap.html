@@ -1,0 +1,80 @@
+---
+layout: null
+permalink: /site/tools/02/content/content-gap.html
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Content Gap Analyzer</title>
+    <meta name="description" content="Find content gaps between two lists.">
+    <link rel="stylesheet" href="/site/tools/02/style.css">
+    <script src="/site/tools/02/config.js"></script>
+</head>
+<body data-page-name="Content Gap Analyzer" data-tool-id="content-gap">
+    <div id="site-header"></div>
+    
+    <div class="layout">
+        <div id="site-sidebar"></div>
+        
+        <main class="main-content">
+            <div id="breadcrumb"></div>
+            
+            <div class="tool-page">
+                <h1>Content Gap Analyzer</h1>
+                <p class="tool-intro">Find content gaps between two lists.</p>
+                
+                <div class="tool-box">
+                    <label>My Content (one per line)</label>
+                    <textarea id="myContent" placeholder="My topics..."></textarea>
+                    
+                    <label style="margin-top: 0.8rem;">Competitor Content (one per line)</label>
+                    <textarea id="compContent" placeholder="Competitor topics..."></textarea>
+                    
+                    <div style="margin-top: 0.8rem;">
+                        <button class="btn btn-primary" onclick="analyze()">Analyze</button>
+                        <button class="btn btn-secondary" onclick="clearAll()">Clear</button>
+                    </div>
+                </div>
+                
+                <div class="tool-box">
+                    <label>Gap Analysis</label>
+                    <div class="output-box" id="gapOutput">-</div>
+                </div>
+                
+                <div id="ad-content" class="ad-container"></div>
+                
+                <section class="content-section">
+                    <h2>Related Tools</h2>
+                    <div class="related-tools" id="related-tools"></div>
+                </section>
+            </div>
+        </main>
+    </div>
+    
+    <div id="site-footer"></div>
+    
+    <script>
+        function analyze() {
+            const mine = document.getElementById('myContent').value.split('\n').filter(l => l.trim());
+            const comp = document.getElementById('compContent').value.split('\n').filter(l => l.trim());
+            
+            if (mine.length === 0 || comp.length === 0) { alert('Enter both lists.'); return; }
+            
+            const missing = comp.filter(topic => !mine.includes(topic));
+            
+            let result = `Topics competitor has but you don't (${missing.length}):\n\n`;
+            missing.forEach(topic => result += `- ${topic}\n`);
+            
+            document.getElementById('gapOutput').textContent = result;
+        }
+        
+        function clearAll() {
+            document.getElementById('myContent').value = '';
+            document.getElementById('compContent').value = '';
+            document.getElementById('gapOutput').textContent = '-';
+        }
+    </script>
+</body>
+</html>

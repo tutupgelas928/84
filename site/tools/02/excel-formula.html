@@ -1,0 +1,98 @@
+---
+layout: null
+permalink: /site/tools/02/data/excel-formula.html
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Excel Formula Generator</title>
+    <meta name="description" content="Generate common Excel formulas.">
+    <link rel="stylesheet" href="/site/tools/02/style.css">
+    <script src="/site/tools/02/config.js"></script>
+</head>
+<body data-page-name="Excel Formula" data-tool-id="excel-formula">
+    <div id="site-header"></div>
+    
+    <div class="layout">
+        <div id="site-sidebar"></div>
+        
+        <main class="main-content">
+            <div id="breadcrumb"></div>
+            
+            <div class="tool-page">
+                <h1>Excel Formula Generator</h1>
+                <p class="tool-intro">Generate common Excel formulas.</p>
+                
+                <div class="tool-box">
+                    <label>Formula Type</label>
+                    <select id="formulaType" onchange="updateFormula()">
+                        <option value="sum">SUM</option>
+                        <option value="average">AVERAGE</option>
+                        <option value="count">COUNT</option>
+                        <option value="max">MAX</option>
+                        <option value="min">MIN</option>
+                        <option value="if">IF</option>
+                        <option value="vlookup">VLOOKUP</option>
+                        <option value="concatenate">CONCATENATE</option>
+                    </select>
+                    
+                    <label style="margin-top: 0.8rem;">Range Start</label>
+                    <input type="text" id="rangeStart" value="A1" oninput="updateFormula()">
+                    
+                    <label style="margin-top: 0.8rem;">Range End</label>
+                    <input type="text" id="rangeEnd" value="A10" oninput="updateFormula()">
+                </div>
+                
+                <div class="tool-box">
+                    <label>Formula</label>
+                    <div class="output-box" id="formulaOutput">-</div>
+                    <button class="btn btn-copy" onclick="copyFormula()">Copy Formula</button>
+                </div>
+                
+                <div id="ad-content" class="ad-container"></div>
+                
+                <section class="content-section">
+                    <h2>Related Tools</h2>
+                    <div class="related-tools" id="related-tools"></div>
+                </section>
+            </div>
+        </main>
+    </div>
+    
+    <div id="site-footer"></div>
+    
+    <script>
+        function updateFormula() {
+            const type = document.getElementById('formulaType').value;
+            const start = document.getElementById('rangeStart').value;
+            const end = document.getElementById('rangeEnd').value;
+            const range = `${start}:${end}`;
+            
+            let formula = '';
+            
+            switch(type) {
+                case 'sum': formula = `=SUM(${range})`; break;
+                case 'average': formula = `=AVERAGE(${range})`; break;
+                case 'count': formula = `=COUNT(${range})`; break;
+                case 'max': formula = `=MAX(${range})`; break;
+                case 'min': formula = `=MIN(${range})`; break;
+                case 'if': formula = `=IF(${start}>0, "Positive", "Negative")`; break;
+                case 'vlookup': formula = `=VLOOKUP(${start}, ${range}, 2, FALSE)`; break;
+                case 'concatenate': formula = `=CONCATENATE(${start}, " ", ${end})`; break;
+            }
+            
+            document.getElementById('formulaOutput').textContent = formula;
+        }
+        
+        function copyFormula() {
+            const t = document.getElementById('formulaOutput').textContent;
+            if (t === '-') { alert('Generate first.'); return; }
+            navigator.clipboard.writeText(t).then(() => alert('Copied!'));
+        }
+        
+        updateFormula();
+    </script>
+</body>
+</html>

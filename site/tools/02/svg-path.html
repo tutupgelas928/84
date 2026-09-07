@@ -1,0 +1,109 @@
+---
+layout: null
+permalink: /site/tools/02/designer/svg-path.html
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SVG Path Generator</title>
+    <meta name="description" content="Generate SVG path from basic shapes.">
+    <link rel="stylesheet" href="/site/tools/02/style.css">
+    <script src="/site/tools/02/config.js"></script>
+</head>
+<body data-page-name="SVG Path Generator" data-tool-id="svg-path">
+    <div id="site-header"></div>
+    
+    <div class="layout">
+        <div id="site-sidebar"></div>
+        
+        <main class="main-content">
+            <div id="breadcrumb"></div>
+            
+            <div class="tool-page">
+                <h1>SVG Path Generator</h1>
+                <p class="tool-intro">Generate SVG path from basic shapes.</p>
+                
+                <div class="tool-box">
+                    <label>Shape</label>
+                    <select id="shape" onchange="updatePath()">
+                        <option value="circle">Circle</option>
+                        <option value="square">Square</option>
+                        <option value="triangle">Triangle</option>
+                        <option value="hexagon">Hexagon</option>
+                        <option value="star">Star</option>
+                    </select>
+                    
+                    <label style="margin-top: 0.8rem;">Size</label>
+                    <input type="range" id="size" min="50" max="200" value="100" oninput="updatePath()">
+                    <span id="sizeVal">100</span>px
+                </div>
+                
+                <div class="tool-box" style="text-align: center;">
+                    <svg id="preview" width="200" height="200" viewBox="0 0 200 200" style="margin: 0 auto;"></svg>
+                </div>
+                
+                <div class="tool-box">
+                    <label>SVG Path</label>
+                    <div class="output-box" id="pathOutput">-</div>
+                    <button class="btn btn-copy" onclick="copyPath()">Copy Path</button>
+                </div>
+                
+                <div id="ad-content" class="ad-container"></div>
+                
+                <section class="content-section">
+                    <h2>Related Tools</h2>
+                    <div class="related-tools" id="related-tools"></div>
+                </section>
+            </div>
+        </main>
+    </div>
+    
+    <div id="site-footer"></div>
+    
+    <script>
+        function updatePath() {
+            const shape = document.getElementById('shape').value;
+            const size = parseInt(document.getElementById('size').value);
+            const center = 100;
+            const r = size / 2;
+            
+            document.getElementById('sizeVal').textContent = size;
+            
+            let path = '';
+            
+            switch(shape) {
+                case 'circle':
+                    path = `M ${center - r} ${center} A ${r} ${r} 0 1 1 ${center + r} ${center} A ${r} ${r} 0 1 1 ${center - r} ${center}`;
+                    break;
+                case 'square':
+                    path = `M ${center - r} ${center - r} H ${center + r} V ${center + r} H ${center - r} Z`;
+                    break;
+                case 'triangle':
+                    path = `M ${center} ${center - r} L ${center + r} ${center + r} L ${center - r} ${center + r} Z`;
+                    break;
+                case 'hexagon':
+                    path = `M ${center + r} ${center} L ${center + r/2} ${center - r * 0.866} L ${center - r/2} ${center - r * 0.866} L ${center - r} ${center} L ${center - r/2} ${center + r * 0.866} L ${center + r/2} ${center + r * 0.866} Z`;
+                    break;
+                case 'star':
+                    path = `M ${center} ${center - r} L ${center + r * 0.224} ${center - r * 0.309} L ${center + r * 0.951} ${center - r * 0.309} L ${center + r * 0.363} ${center + r * 0.118} L ${center + r * 0.588} ${center + r * 0.809} L ${center} ${center + r * 0.382} L ${center - r * 0.588} ${center + r * 0.809} L ${center - r * 0.363} ${center + r * 0.118} L ${center - r * 0.951} ${center - r * 0.309} L ${center - r * 0.224} ${center - r * 0.309} Z`;
+                    break;
+            }
+            
+            document.getElementById('pathOutput').textContent = path;
+            
+            const preview = document.getElementById('preview');
+            preview.innerHTML = `<path d="${path}" fill="var(--primary)" />`;
+        }
+        
+        function copyPath() {
+            const t = document.getElementById('pathOutput').textContent;
+            if (t === '-') { alert('Generate first.'); return; }
+            navigator.clipboard.writeText(t).then(() => alert('Copied!'));
+        }
+        
+        updatePath();
+    </script>
+</body>
+</html>

@@ -1,0 +1,91 @@
+---
+layout: null
+permalink: /site/tools/02/security/signature-generator.html
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Signature</title>
+    <meta name="description" content="Sign and verify messages.">
+    <link rel="stylesheet" href="/site/tools/02/style.css">
+    <script src="/site/tools/02/config.js"></script>
+</head>
+<body data-page-name="Digital Signature" data-tool-id="signature">
+    <div id="site-header"></div>
+    
+    <div class="layout">
+        <div id="site-sidebar"></div>
+        
+        <main class="main-content">
+            <div id="breadcrumb"></div>
+            
+            <div class="tool-page">
+                <h1>Digital Signature</h1>
+                <p class="tool-intro">Sign and verify messages using HMAC.</p>
+                
+                <div class="tool-box">
+                    <label>Secret Key</label>
+                    <input type="text" id="secretKey" placeholder="Enter secret key...">
+                    
+                    <label style="margin-top: 0.8rem;">Message</label>
+                    <textarea id="message" placeholder="Type your message..."></textarea>
+                    
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 0.8rem;">
+                        <button class="btn btn-primary" onclick="signMessage()">Sign</button>
+                        <button class="btn btn-copy" onclick="copySignature()">Copy Signature</button>
+                    </div>
+                </div>
+                
+                <div class="tool-box">
+                    <label>Signature (HMAC-SHA256)</label>
+                    <div class="output-box" id="signatureOutput">-</div>
+                </div>
+                
+                <div id="ad-content" class="ad-container"></div>
+                
+                <section class="content-section">
+                    <h2>Related Tools</h2>
+                    <div class="related-tools" id="related-tools"></div>
+                </section>
+            </div>
+        </main>
+    </div>
+    
+    <div id="site-footer"></div>
+    
+    <script>
+        async function signMessage() {
+            const key = document.getElementById('secretKey').value;
+            const message = document.getElementById('message').value;
+            
+            if (!key) { alert('Enter secret key.'); return; }
+            if (!message) { alert('Enter message.'); return; }
+            
+            const encoder = new TextEncoder();
+            const keyData = encoder.encode(key);
+            const messageData = encoder.encode(message);
+            
+            const cryptoKey = await crypto.subtle.importKey(
+                'raw',
+                keyData,
+                { name: 'HMAC', hash: 'SHA-256' },
+                false,
+                ['sign']
+            );
+            
+            const signature = await crypto.subtle.sign('HMAC', cryptoKey, messageData);
+            const hex = Array.from(new Uint8Array(signature)).map(b => b.toString(16).padStart(2, '0')).join('');
+            
+            document.getElementById('signatureOutput').textContent = hex;
+        }
+        
+        function copySignature() {
+            const t = document.getElementById('signatureOutput').textContent;
+            if (t === '-') { alert('Sign first.'); return; }
+            navigator.clipboard.writeText(t).then(() => alert('Copied!'));
+        }
+    </script>
+</body>
+</html>
