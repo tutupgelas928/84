@@ -2,12 +2,13 @@
 // CONFIG - PAKET 02 - SVG ICONS
 // ============================================
 
-// ===== SVG ICON LIBRARY (Inline) =====
 const ICONS = {
     logo: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>',
     home: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>',
     about: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>',
     contact: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>',
+    menu: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>',
+    close: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>',
     
     developer: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>',
     designer: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19l7-7 3 3-7 7-3-3z"></path><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path><path d="M2 2l7.586 7.586"></path><circle cx="11" cy="11" r="2"></circle></svg>',
@@ -144,16 +145,16 @@ const CONFIG = (function() {
         },
         
         categories: [
-            { id: 'developer', name: 'Developer', icon: ICONS.developer },
-            { id: 'designer', name: 'Designer', icon: ICONS.designer },
-            { id: 'data', name: 'Data', icon: ICONS.data },
-            { id: 'content', name: 'Content', icon: ICONS.content },
-            { id: 'security', name: 'Security', icon: ICONS.security },
-            { id: 'math', name: 'Math', icon: ICONS.math }
+            { id: 'developer', name: 'Developer', icon: ICONS.developer, file: 'category-developer.html' },
+            { id: 'designer', name: 'Designer', icon: ICONS.designer, file: 'category-designer.html' },
+            { id: 'data', name: 'Data', icon: ICONS.data, file: 'category-data.html' },
+            { id: 'content', name: 'Content', icon: ICONS.content, file: 'category-content.html' },
+            { id: 'security', name: 'Security', icon: ICONS.security, file: 'category-security.html' },
+            { id: 'math', name: 'Math', icon: ICONS.math, file: 'category-math.html' }
         ],
         
         tools: [
-            // Developer (15)
+            // Developer
             { id: 'regex-playground', name: 'Regex Playground', icon: ICONS.regex, file: 'developer/regex-playground.html', description: 'Test regex with highlighting', category: 'developer' },
             { id: 'jwt-decoder', name: 'JWT Decoder', icon: ICONS.jwt, file: 'developer/jwt-decoder.html', description: 'Decode JSON Web Tokens', category: 'developer' },
             { id: 'code-diff', name: 'Code Diff', icon: ICONS.diff, file: 'developer/code-diff.html', description: 'Compare two code blocks', category: 'developer' },
@@ -161,7 +162,7 @@ const CONFIG = (function() {
             { id: 'css-specificity', name: 'CSS Specificity', icon: ICONS.css, file: 'developer/css-specificity.html', description: 'Calculate CSS specificity', category: 'developer' },
             { id: 'js-minifier', name: 'JS Minifier', icon: ICONS.js, file: 'developer/js-minifier.html', description: 'Minify JavaScript', category: 'developer' },
             { id: 'html-prettifier', name: 'HTML Prettifier', icon: ICONS.html, file: 'developer/html-prettifier.html', description: 'Format HTML', category: 'developer' },
-            { id: 'xml-json', name: 'XML ↔ JSON', icon: ICONS.convert, file: 'developer/xml-json.html', description: 'Convert XML & JSON', category: 'developer' },
+            { id: 'xml-json', name: 'XML to JSON', icon: ICONS.convert, file: 'developer/xml-json.html', description: 'Convert XML & JSON', category: 'developer' },
             { id: 'graphql-parser', name: 'GraphQL Parser', icon: ICONS.api, file: 'developer/graphql-parser.html', description: 'Parse GraphQL', category: 'developer' },
             { id: 'ts-js', name: 'TypeScript to JS', icon: ICONS.convert, file: 'developer/ts-js.html', description: 'Convert TypeScript', category: 'developer' },
             { id: 'regex-generator', name: 'Regex Generator', icon: ICONS.regex, file: 'developer/regex-generator.html', description: 'Generate regex', category: 'developer' },
@@ -170,7 +171,7 @@ const CONFIG = (function() {
             { id: 'base64-image', name: 'Base64 Image', icon: ICONS.image, file: 'developer/base64-image.html', description: 'Image to Base64', category: 'developer' },
             { id: 'json-schema', name: 'JSON Schema', icon: ICONS.file, file: 'developer/json-schema-validator.html', description: 'Validate JSON schema', category: 'developer' },
             
-            // Designer (10)
+            // Designer
             { id: 'box-shadow', name: 'Box Shadow', icon: ICONS.shadow, file: 'designer/box-shadow.html', description: 'Visual shadow builder', category: 'designer' },
             { id: 'border-radius', name: 'Border Radius', icon: ICONS.radius, file: 'designer/border-radius.html', description: 'Visual radius builder', category: 'designer' },
             { id: 'grid-generator', name: 'Grid Generator', icon: ICONS.grid, file: 'designer/grid-generator.html', description: 'CSS Grid builder', category: 'designer' },
@@ -182,17 +183,17 @@ const CONFIG = (function() {
             { id: 'image-cropper', name: 'Image Cropper', icon: ICONS.crop, file: 'designer/image-cropper.html', description: 'Crop images', category: 'designer' },
             { id: 'image-resizer', name: 'Image Resizer', icon: ICONS.resize, file: 'designer/image-resizer.html', description: 'Resize images', category: 'designer' },
             
-            // Data (8)
+            // Data
             { id: 'csv-analyzer', name: 'CSV Analyzer', icon: ICONS.chart, file: 'data/csv-analyzer.html', description: 'Analyze CSV data', category: 'data' },
-            { id: 'json-path', name: 'JSON Path', icon: ICONS.search, file: 'data/json-path.html', description: 'Query JSON data', category: 'data' },
+            { id: 'json-formatter', name: 'JSON Formatter', icon: ICONS.file, file: 'data/json-formatter.html', description: 'Format JSON data', category: 'data' },
+            { id: 'json-csv', name: 'JSON to CSV', icon: ICONS.convert, file: 'data/json-csv.html', description: 'Convert JSON to CSV', category: 'data' },
+            { id: 'csv-json', name: 'CSV to JSON', icon: ICONS.convert, file: 'data/csv-json.html', description: 'Convert CSV to JSON', category: 'data' },
             { id: 'table-generator', name: 'Table Generator', icon: ICONS.table, file: 'data/table-generator.html', description: 'Generate HTML tables', category: 'data' },
-            { id: 'chart-formatter', name: 'Chart Formatter', icon: ICONS.chart, file: 'data/chart-formatter.html', description: 'Format chart data', category: 'data' },
-            { id: 'excel-formula', name: 'Excel Formula', icon: ICONS.table, file: 'data/excel-formula.html', description: 'Generate Excel formulas', category: 'data' },
-            { id: 'csv-splitter', name: 'CSV Splitter', icon: ICONS.convert, file: 'data/csv-splitter.html', description: 'Split CSV files', category: 'data' },
             { id: 'data-sampler', name: 'Data Sampler', icon: ICONS.data, file: 'data/data-sampler.html', description: 'Sample from dataset', category: 'data' },
             { id: 'data-anonymizer', name: 'Data Anonymizer', icon: ICONS.lock, file: 'data/data-anonymizer.html', description: 'Mask sensitive data', category: 'data' },
+            { id: 'excel-formula', name: 'Excel Formula', icon: ICONS.table, file: 'data/excel-formula.html', description: 'Generate Excel formulas', category: 'data' },
             
-            // Content (7)
+            // Content
             { id: 'seo-meta', name: 'SEO Meta', icon: ICONS.search, file: 'content/seo-meta.html', description: 'Generate meta tags', category: 'content' },
             { id: 'keyword-clustering', name: 'Keyword Clustering', icon: ICONS.chart, file: 'content/keyword-clustering.html', description: 'Group keywords', category: 'content' },
             { id: 'content-gap', name: 'Content Gap', icon: ICONS.diff, file: 'content/content-gap.html', description: 'Find content gaps', category: 'content' },
@@ -201,14 +202,14 @@ const CONFIG = (function() {
             { id: 'sentiment', name: 'Sentiment Analyzer', icon: ICONS.chart, file: 'content/sentiment-analyzer.html', description: 'Analyze sentiment', category: 'content' },
             { id: 'plagiarism', name: 'Plagiarism Checker', icon: ICONS.search, file: 'content/plagiarism-checker.html', description: 'Similarity check', category: 'content' },
             
-            // Security (5)
+            // Security
             { id: 'rsa-generator', name: 'RSA Generator', icon: ICONS.key, file: 'security/rsa-generator.html', description: 'Generate RSA keys', category: 'security' },
             { id: 'aes-encryptor', name: 'AES Encryptor', icon: ICONS.lock, file: 'security/aes-encryptor.html', description: 'AES encrypt/decrypt', category: 'security' },
             { id: 'hash-suite', name: 'Hash Suite', icon: ICONS.hash, file: 'security/hash-suite.html', description: 'SHA-256, SHA-512', category: 'security' },
             { id: 'password-analyzer', name: 'Password Analyzer', icon: ICONS.shield, file: 'security/password-analyzer.html', description: 'Password strength', category: 'security' },
             { id: 'signature', name: 'Digital Signature', icon: ICONS.signature, file: 'security/signature-generator.html', description: 'Sign & verify', category: 'security' },
             
-            // Math (5)
+            // Math
             { id: 'prime-generator', name: 'Prime Generator', icon: ICONS.number, file: 'math/prime-generator.html', description: 'Generate primes', category: 'math' },
             { id: 'fibonacci', name: 'Fibonacci', icon: ICONS.fibonacci, file: 'math/fibonacci.html', description: 'Fibonacci sequence', category: 'math' },
             { id: 'big-number', name: 'Big Number', icon: ICONS.number, file: 'math/big-number.html', description: 'Large numbers', category: 'math' },
@@ -258,6 +259,9 @@ function renderHeader() {
                 <span>${CONFIG.siteName}</span>
             </a>
             <nav>${navLinks}</nav>
+            <button class="sidebar-toggle" onclick="toggleSidebar()" aria-label="Toggle navigation">
+                ${ICONS.menu}
+            </button>
         </header>
     `;
 }
@@ -265,7 +269,7 @@ function renderHeader() {
 function renderSidebar() {
     const categoryHTML = CONFIG.categories.map(cat => {
         const toolsHTML = CONFIG.tools.filter(t => t.category === cat.id).map(tool => 
-            `<a href="${CONFIG.basePath}${tool.file}" class="sidebar-link">
+            `<a href="${CONFIG.basePath}${tool.file}" class="sidebar-link" onclick="closeSidebarOnMobile()">
                 <span class="sidebar-icon">${tool.icon}</span>
                 <span>${tool.name}</span>
             </a>`
@@ -274,8 +278,10 @@ function renderSidebar() {
         return `
             <div class="sidebar-section">
                 <h3 class="sidebar-title">
-                    <span>${cat.icon}</span>
-                    <span>${cat.name}</span>
+                    <a href="${CONFIG.basePath}${cat.file}" style="display:flex;align-items:center;gap:6px;color:inherit;text-decoration:none;">
+                        <span>${cat.icon}</span>
+                        <span>${cat.name}</span>
+                    </a>
                 </h3>
                 ${toolsHTML}
             </div>
@@ -283,7 +289,7 @@ function renderSidebar() {
     }).join('');
     
     return `
-        <aside class="sidebar">
+        <aside class="sidebar" id="sidebar">
             <div class="sidebar-header">
                 <div class="sidebar-logo">${CONFIG.logoIcon}</div>
                 <div class="sidebar-title">${CONFIG.siteName}</div>
@@ -292,6 +298,10 @@ function renderSidebar() {
             ${categoryHTML}
         </aside>
     `;
+}
+
+function renderOverlay() {
+    return `<div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>`;
 }
 
 function renderFooter() {
@@ -315,7 +325,7 @@ function renderFooter() {
                 <div class="footer-section">
                     <h4>Categories</h4>
                     <ul>
-                        ${CONFIG.categories.map(c => `<li>${c.name} (${CONFIG.tools.filter(t => t.category === c.id).length})</li>`).join('')}
+                        ${CONFIG.categories.map(c => `<li><a href="${CONFIG.basePath}${c.file}">${c.name} (${CONFIG.tools.filter(t => t.category === c.id).length})</a></li>`).join('')}
                     </ul>
                 </div>
             </div>
@@ -330,7 +340,7 @@ function renderBreadcrumb(pageName) {
     return `
         <div class="breadcrumb">
             <a href="${CONFIG.basePath}index.html">Home</a>
-            <span>→</span>
+            <span>/</span>
             <span>${pageName}</span>
         </div>
     `;
@@ -357,7 +367,7 @@ function renderCategoryCards() {
     return CONFIG.categories.map(cat => {
         const count = CONFIG.tools.filter(t => t.category === cat.id).length;
         return `
-            <a href="#${cat.id}" class="category-card">
+            <a href="${CONFIG.basePath}${cat.file}" class="category-card">
                 <div class="category-icon">${cat.icon}</div>
                 <h3>${cat.name}</h3>
                 <p>${count} tools</p>
@@ -401,11 +411,27 @@ function renderAdsense(slotName) {
 function setPageTitle(pageName) {
     document.title = `${pageName} | ${CONFIG.siteName}`;
     const metaDesc = document.querySelector('meta[name="description"]');
-    if (metaDesc && pageName !== 'Home') {
+    if (metaDesc && pageName !== 'Dashboard') {
         metaDesc.content = `${pageName} - advanced tool. ${CONFIG.description}`;
     }
 }
 
+// ===== SIDEBAR TOGGLE =====
+function toggleSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('sidebarOverlay');
+    
+    if (sidebar) sidebar.classList.toggle('active');
+    if (overlay) overlay.classList.toggle('active');
+}
+
+function closeSidebarOnMobile() {
+    if (window.innerWidth <= 768) {
+        toggleSidebar();
+    }
+}
+
+// ===== INIT =====
 document.addEventListener('DOMContentLoaded', function() {
     applyColors();
     
@@ -414,6 +440,13 @@ document.addEventListener('DOMContentLoaded', function() {
     
     const sidebarEl = document.getElementById('site-sidebar');
     if (sidebarEl) sidebarEl.innerHTML = renderSidebar();
+    
+    const layoutEl = document.querySelector('.layout');
+    if (layoutEl && !document.getElementById('sidebarOverlay')) {
+        const overlayDiv = document.createElement('div');
+        overlayDiv.innerHTML = renderOverlay();
+        layoutEl.appendChild(overlayDiv.firstChild);
+    }
     
     const footerEl = document.getElementById('site-footer');
     if (footerEl) footerEl.innerHTML = renderFooter();
@@ -443,4 +476,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     const adFooter = document.getElementById('ad-footer');
     if (adFooter) adFooter.innerHTML = renderAdsense('footer');
+    
+    window.toggleSidebar = toggleSidebar;
+    window.closeSidebarOnMobile = closeSidebarOnMobile;
 });
