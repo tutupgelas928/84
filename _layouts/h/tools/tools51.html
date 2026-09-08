@@ -1,0 +1,118 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JWT Decoder</title>
+    <meta name="description" content="Decode JSON Web Tokens. View header, payload, and signature.">
+    <link rel="stylesheet" href="/site/tools/02/style.css">
+    <script src="/site/tools/02/config.js"></script>
+{% include head.html %}
+</head>
+<body data-page-name="JWT Decoder" data-tool-id="jwt-decoder">
+    <div id="site-header"></div>
+    
+    <div class="layout">
+        <div id="site-sidebar"></div>
+        
+        <main class="main-content">
+        <details><summary>...</summary>
+        {{content}}
+        </details>
+            <div id="breadcrumb"></div>
+            
+            <div class="tool-page">
+                <h1>JWT Decoder</h1>
+                <p class="tool-intro">Decode JSON Web Token. View header, payload, and signature.</p>
+                
+                <div class="tool-box">
+                    <label>JWT Token</label>
+                    <textarea id="jwtInput" placeholder="Paste JWT token here..." style="font-family: monospace;"></textarea>
+                    
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 0.8rem;">
+                        <button class="btn btn-primary" onclick="decodeJWT()">Decode</button>
+                        <button class="btn btn-secondary" onclick="clearJWT()">Clear</button>
+                        <button class="btn btn-secondary" onclick="sampleJWT()">Sample</button>
+                    </div>
+                </div>
+                
+                <div class="tool-box">
+                    <label>Header</label>
+                    <div class="output-box" id="headerOutput">-</div>
+                    
+                    <label style="margin-top: 1rem;">Payload</label>
+                    <div class="output-box" id="payloadOutput">-</div>
+                    
+                    <label style="margin-top: 1rem;">Signature</label>
+                    <div class="output-box" id="signatureOutput">-</div>
+                </div>
+                
+                <div id="ad-content" class="ad-container"></div>
+                
+                <section class="content-section">
+                    <h2>How to Use</h2>
+                    <ol>
+                        <li>Paste your JWT token.</li>
+                        <li>Click Decode.</li>
+                        <li>View header and payload.</li>
+                    </ol>
+                </section>
+                
+                <section class="content-section">
+                    <h2>Related Tools</h2>
+                    <div class="related-tools" id="related-tools"></div>
+                </section>
+            </div>
+        </main>
+    </div>
+    
+    
+    {% include /ads/gobloggugel/default.html %}
+{% include footer.html %}
+
+    
+    <script>
+        function base64UrlDecode(str) {
+            str = str.replace(/-/g, '+').replace(/_/g, '/');
+            while (str.length % 4) str += '=';
+            return atob(str);
+        }
+        
+        function decodeJWT() {
+            const token = document.getElementById('jwtInput').value.trim();
+            if (!token) { alert('Please paste a JWT token.'); return; }
+            
+            const parts = token.split('.');
+            if (parts.length !== 3) { alert('Invalid JWT format.'); return; }
+            
+            try {
+                const header = JSON.parse(base64UrlDecode(parts[0]));
+                const payload = JSON.parse(base64UrlDecode(parts[1]));
+                
+                document.getElementById('headerOutput').textContent = JSON.stringify(header, null, 2);
+                document.getElementById('payloadOutput').textContent = JSON.stringify(payload, null, 2);
+                document.getElementById('signatureOutput').textContent = parts[2];
+            } catch(e) {
+                alert('Error: ' + e.message);
+            }
+        }
+        
+        function clearJWT() {
+            document.getElementById('jwtInput').value = '';
+            document.getElementById('headerOutput').textContent = '-';
+            document.getElementById('payloadOutput').textContent = '-';
+            document.getElementById('signatureOutput').textContent = '-';
+        }
+        
+        function sampleJWT() {
+            const header = { alg: 'HS256', typ: 'JWT' };
+            const payload = { sub: '1234567890', name: 'John Doe', iat: 1516239022 };
+            const h = btoa(JSON.stringify(header)).replace(/=/g,'').replace(/\+/g,'-').replace(/\//g,'_');
+            const p = btoa(JSON.stringify(payload)).replace(/=/g,'').replace(/\+/g,'-').replace(/\//g,'_');
+            document.getElementById('jwtInput').value = `${h}.${p}.sample-signature`;
+            decodeJWT();
+        }
+    </script>
+</body>
+</html>

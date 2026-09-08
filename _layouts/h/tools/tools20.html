@@ -1,0 +1,122 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Box Shadow Generator</title>
+    <meta name="description" content="Visual CSS box-shadow generator.">
+    <link rel="stylesheet" href="/site/tools/02/style.css">
+    <script src="/site/tools/02/config.js"></script>
+{% include head.html %}
+</head>
+<body data-page-name="Box Shadow Generator" data-tool-id="box-shadow">
+    <div id="site-header"></div>
+    
+    <div class="layout">
+        <div id="site-sidebar"></div>
+        
+        <main class="main-content">
+        <details><summary>...</summary>
+        {{content}}
+        </details>
+            <div id="breadcrumb"></div>
+            
+            <div class="tool-page">
+                <h1>Box Shadow Generator</h1>
+                <p class="tool-intro">Visual CSS box-shadow generator.</p>
+                
+                <div class="tool-box">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div>
+                            <label>X Offset</label>
+                            <input type="range" id="xOffset" min="-50" max="50" value="0" oninput="updateShadow()">
+                            <span id="xOffsetVal">0</span>px
+                        </div>
+                        <div>
+                            <label>Y Offset</label>
+                            <input type="range" id="yOffset" min="-50" max="50" value="10" oninput="updateShadow()">
+                            <span id="yOffsetVal">10</span>px
+                        </div>
+                        <div>
+                            <label>Blur</label>
+                            <input type="range" id="blur" min="0" max="100" value="20" oninput="updateShadow()">
+                            <span id="blurVal">20</span>px
+                        </div>
+                        <div>
+                            <label>Spread</label>
+                            <input type="range" id="spread" min="-50" max="50" value="0" oninput="updateShadow()">
+                            <span id="spreadVal">0</span>px
+                        </div>
+                        <div>
+                            <label>Opacity</label>
+                            <input type="range" id="opacity" min="0" max="100" value="30" oninput="updateShadow()">
+                            <span id="opacityVal">30</span>%
+                        </div>
+                        <div>
+                            <label>Color</label>
+                            <input type="color" id="shadowColor" value="#000000" oninput="updateShadow()">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tool-box" style="text-align: center; padding: 3rem;">
+                    <div id="preview" style="width: 150px; height: 150px; background: white; margin: 0 auto; border-radius: 8px;"></div>
+                </div>
+                
+                <div class="tool-box">
+                    <label>CSS Code</label>
+                    <div class="output-box" id="cssOutput">-</div>
+                    <button class="btn btn-copy" onclick="copyCSS()">Copy CSS</button>
+                </div>
+                
+                <div id="ad-content" class="ad-container"></div>
+                
+                <section class="content-section">
+                    <h2>Related Tools</h2>
+                    <div class="related-tools" id="related-tools"></div>
+                </section>
+            </div>
+        </main>
+    </div>
+    
+    
+    {% include /ads/gobloggugel/default.html %}
+{% include footer.html %}
+
+    
+    <script>
+        function updateShadow() {
+            const x = document.getElementById('xOffset').value;
+            const y = document.getElementById('yOffset').value;
+            const b = document.getElementById('blur').value;
+            const s = document.getElementById('spread').value;
+            const o = document.getElementById('opacity').value / 100;
+            const color = document.getElementById('shadowColor').value;
+            
+            document.getElementById('xOffsetVal').textContent = x;
+            document.getElementById('yOffsetVal').textContent = y;
+            document.getElementById('blurVal').textContent = b;
+            document.getElementById('spreadVal').textContent = s;
+            document.getElementById('opacityVal').textContent = document.getElementById('opacity').value;
+            
+            const hex = color.replace('#', '');
+            const r = parseInt(hex.substring(0, 2), 16);
+            const g = parseInt(hex.substring(2, 4), 16);
+            const bl = parseInt(hex.substring(4, 6), 16);
+            
+            const shadow = `${x}px ${y}px ${b}px ${s}px rgba(${r}, ${g}, ${bl}, ${o})`;
+            document.getElementById('preview').style.boxShadow = shadow;
+            document.getElementById('cssOutput').textContent = `box-shadow: ${shadow};`;
+        }
+        
+        function copyCSS() {
+            const t = document.getElementById('cssOutput').textContent;
+            if (t === '-') { alert('Generate first.'); return; }
+            navigator.clipboard.writeText(t).then(() => alert('Copied!'));
+        }
+        
+        updateShadow();
+    </script>
+</body>
+</html>

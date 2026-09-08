@@ -1,0 +1,105 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Border Radius Generator</title>
+    <meta name="description" content="Visual CSS border-radius generator.">
+    <link rel="stylesheet" href="/site/tools/02/style.css">
+    <script src="/site/tools/02/config.js"></script>
+{% include head.html %}
+</head>
+<body data-page-name="Border Radius Generator" data-tool-id="border-radius">
+    <div id="site-header"></div>
+    
+    <div class="layout">
+        <div id="site-sidebar"></div>
+        
+        <main class="main-content">
+        <details><summary>...</summary>
+        {{content}}
+        </details>
+            <div id="breadcrumb"></div>
+            
+            <div class="tool-page">
+                <h1>Border Radius Generator</h1>
+                <p class="tool-intro">Visual CSS border-radius generator.</p>
+                
+                <div class="tool-box">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div>
+                            <label>Top Left</label>
+                            <input type="range" id="tl" min="0" max="100" value="8" oninput="updateRadius()">
+                            <span id="tlVal">8</span>px
+                        </div>
+                        <div>
+                            <label>Top Right</label>
+                            <input type="range" id="tr" min="0" max="100" value="8" oninput="updateRadius()">
+                            <span id="trVal">8</span>px
+                        </div>
+                        <div>
+                            <label>Bottom Right</label>
+                            <input type="range" id="br" min="0" max="100" value="8" oninput="updateRadius()">
+                            <span id="brVal">8</span>px
+                        </div>
+                        <div>
+                            <label>Bottom Left</label>
+                            <input type="range" id="bl" min="0" max="100" value="8" oninput="updateRadius()">
+                            <span id="blVal">8</span>px
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tool-box" style="text-align: center; padding: 3rem;">
+                    <div id="preview" style="width: 150px; height: 150px; background: linear-gradient(135deg, var(--primary), var(--secondary)); margin: 0 auto;"></div>
+                </div>
+                
+                <div class="tool-box">
+                    <label>CSS Code</label>
+                    <div class="output-box" id="cssOutput">-</div>
+                    <button class="btn btn-copy" onclick="copyCSS()">Copy CSS</button>
+                </div>
+                
+                <div id="ad-content" class="ad-container"></div>
+                
+                <section class="content-section">
+                    <h2>Related Tools</h2>
+                    <div class="related-tools" id="related-tools"></div>
+                </section>
+            </div>
+        </main>
+    </div>
+    
+    
+    {% include /ads/gobloggugel/default.html %}
+{% include footer.html %}
+
+    
+    <script>
+        function updateRadius() {
+            const tl = document.getElementById('tl').value;
+            const tr = document.getElementById('tr').value;
+            const br = document.getElementById('br').value;
+            const bl = document.getElementById('bl').value;
+            
+            document.getElementById('tlVal').textContent = tl;
+            document.getElementById('trVal').textContent = tr;
+            document.getElementById('brVal').textContent = br;
+            document.getElementById('blVal').textContent = bl;
+            
+            const radius = `${tl}px ${tr}px ${br}px ${bl}px`;
+            document.getElementById('preview').style.borderRadius = radius;
+            document.getElementById('cssOutput').textContent = `border-radius: ${radius};`;
+        }
+        
+        function copyCSS() {
+            const t = document.getElementById('cssOutput').textContent;
+            if (t === '-') { alert('Generate first.'); return; }
+            navigator.clipboard.writeText(t).then(() => alert('Copied!'));
+        }
+        
+        updateRadius();
+    </script>
+</body>
+</html>

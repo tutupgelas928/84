@@ -1,0 +1,92 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS Specificity Calculator</title>
+    <meta name="description" content="Calculate CSS specificity score.">
+    <link rel="stylesheet" href="/site/tools/02/style.css">
+    <script src="/site/tools/02/config.js"></script>
+{% include head.html %}
+</head>
+<body data-page-name="CSS Specificity" data-tool-id="css-specificity">
+    <div id="site-header"></div>
+    
+    <div class="layout">
+        <div id="site-sidebar"></div>
+        
+        <main class="main-content">
+        <details><summary>...</summary>
+        {{content}}
+        </details>
+            <div id="breadcrumb"></div>
+            
+            <div class="tool-page">
+                <h1>CSS Specificity Calculator</h1>
+                <p class="tool-intro">Calculate CSS specificity score.</p>
+                
+                <div class="tool-box">
+                    <label>CSS Selector</label>
+                    <input type="text" id="selector" placeholder="e.g., #header .nav a:hover">
+                    
+                    <div style="margin-top: 0.8rem;">
+                        <button class="btn btn-primary" onclick="calculate()">Calculate</button>
+                        <button class="btn btn-secondary" onclick="sampleSelector()">Sample</button>
+                    </div>
+                </div>
+                
+                <div class="tool-box">
+                    <label>Result</label>
+                    <div class="stats">
+                        <div class="stat-card"><div class="stat-number" id="idCount">0</div><div class="stat-label">IDs</div></div>
+                        <div class="stat-card"><div class="stat-number" id="classCount">0</div><div class="stat-label">Classes</div></div>
+                        <div class="stat-card"><div class="stat-number" id="elementCount">0</div><div class="stat-label">Elements</div></div>
+                    </div>
+                    <label style="margin-top: 0.8rem;">Specificity Score</label>
+                    <div class="output-box" id="specificity">-</div>
+                </div>
+                
+                <div id="ad-content" class="ad-container"></div>
+                
+                <section class="content-section">
+                    <h2>Related Tools</h2>
+                    <div class="related-tools" id="related-tools"></div>
+                </section>
+            </div>
+        </main>
+    </div>
+    
+    
+    {% include /ads/gobloggugel/default.html %}
+{% include footer.html %}
+
+    
+    <script>
+        function calculate() {
+            const selector = document.getElementById('selector').value.trim();
+            if (!selector) { alert('Enter selector.'); return; }
+            
+            const ids = (selector.match(/#[\w-]+/g) || []).length;
+            const classes = (selector.match(/\.[\w-]+/g) || []).length;
+            const pseudoClasses = (selector.match(/:(?!:)[\w-]+/g) || []).length;
+            const attributes = (selector.match(/\[[\w-]+\]/g) || []).length;
+            const elements = (selector.match(/^[a-zA-Z]+|[a-zA-Z]+(?=[.#\[])/g) || []).length;
+            const pseudoElements = (selector.match(/::[\w-]+/g) || []).length;
+            
+            const classTotal = classes + pseudoClasses + attributes;
+            
+            document.getElementById('idCount').textContent = ids;
+            document.getElementById('classCount').textContent = classTotal;
+            document.getElementById('elementCount').textContent = elements + pseudoElements;
+            
+            document.getElementById('specificity').textContent = `Specificity: (${ids}, ${classTotal}, ${elements + pseudoElements})`;
+        }
+        
+        function sampleSelector() {
+            document.getElementById('selector').value = '#header .nav a:hover';
+            calculate();
+        }
+    </script>
+</body>
+</html>

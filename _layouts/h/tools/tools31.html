@@ -1,0 +1,95 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSV Analyzer</title>
+    <meta name="description" content="Analyze CSV data structure.">
+    <link rel="stylesheet" href="/site/tools/02/style.css">
+    <script src="/site/tools/02/config.js"></script>
+{% include head.html %}
+</head>
+<body data-page-name="CSV Analyzer" data-tool-id="csv-analyzer">
+    <div id="site-header"></div>
+    
+    <div class="layout">
+        <div id="site-sidebar"></div>
+        
+        <main class="main-content">
+        <details><summary>...</summary>
+        {{content}}
+        </details>
+            <div id="breadcrumb"></div>
+            
+            <div class="tool-page">
+                <h1>CSV Analyzer</h1>
+                <p class="tool-intro">Analyze CSV data structure.</p>
+                
+                <div class="tool-box">
+                    <label>CSV Data</label>
+                    <textarea id="csvInput" placeholder="Paste CSV data here..." style="font-family: monospace;"></textarea>
+                    
+                    <div style="margin-top: 0.8rem;">
+                        <button class="btn btn-primary" onclick="analyze()">Analyze</button>
+                        <button class="btn btn-secondary" onclick="clearAll()">Clear</button>
+                        <button class="btn btn-secondary" onclick="sampleCSV()">Sample</button>
+                    </div>
+                </div>
+                
+                <div class="tool-box">
+                    <label>Results</label>
+                    <div class="stats">
+                        <div class="stat-card"><div class="stat-number" id="rowCount">0</div><div class="stat-label">Rows</div></div>
+                        <div class="stat-card"><div class="stat-number" id="colCount">0</div><div class="stat-label">Columns</div></div>
+                        <div class="stat-card"><div class="stat-number" id="cellCount">0</div><div class="stat-label">Cells</div></div>
+                    </div>
+                    
+                    <label style="margin-top: 1rem;">Column Names</label>
+                    <div class="output-box" id="columnNames">-</div>
+                </div>
+                
+                <div id="ad-content" class="ad-container"></div>
+                
+                <section class="content-section">
+                    <h2>Related Tools</h2>
+                    <div class="related-tools" id="related-tools"></div>
+                </section>
+            </div>
+        </main>
+    </div>
+    
+    
+    {% include /ads/gobloggugel/default.html %}
+{% include footer.html %}
+
+    
+    <script>
+        function analyze() {
+            const csv = document.getElementById('csvInput').value.trim();
+            if (!csv) { alert('Paste CSV first.'); return; }
+            
+            const lines = csv.split('\n').filter(l => l.trim());
+            const headers = lines[0].split(',').map(h => h.trim());
+            
+            document.getElementById('rowCount').textContent = lines.length - 1;
+            document.getElementById('colCount').textContent = headers.length;
+            document.getElementById('cellCount').textContent = (lines.length - 1) * headers.length;
+            document.getElementById('columnNames').textContent = headers.join(', ');
+        }
+        
+        function clearAll() {
+            document.getElementById('csvInput').value = '';
+            document.getElementById('rowCount').textContent = '0';
+            document.getElementById('colCount').textContent = '0';
+            document.getElementById('cellCount').textContent = '0';
+            document.getElementById('columnNames').textContent = '-';
+        }
+        
+        function sampleCSV() {
+            document.getElementById('csvInput').value = 'name,email,age\nJohn,john@example.com,30\nJane,jane@example.com,25\nBob,bob@example.com,35';
+            analyze();
+        }
+    </script>
+</body>
+</html>

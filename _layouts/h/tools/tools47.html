@@ -1,0 +1,46 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <meta name="description" content="Advanced developer tools suite. 50+ tools for developers, designers, and power users.">
+    <link rel="stylesheet" href="/site/tools/02/style.css">
+    <script src="/site/tools/02/config.js"></script>
+{% include head.html %}
+</head>
+<body data-page-name="Dashboard">
+    <div id="site-header"></div>
+    
+    <div class="layout">
+        <div id="site-sidebar"></div>
+        
+        <main class="main-content">
+        <details><summary>...</summary>
+        {{content}}
+        </details>
+            <section class="hero">
+                <h1>Advanced Tools Suite</h1>
+                <p>50+ powerful tools for developers, designers, and power users</p>
+                <span class="hero-badge">100% Private · Instant · Free</span>
+            </section>
+            
+            <div id="ad-header" class="ad-container"></div>
+            
+            <h2 class="section-title">Categories</h2>
+            <div class="category-grid" id="category-grid"></div>
+            
+            <h2 class="section-title">All Tools</h2>
+            <div class="tools-grid" id="tools-grid"></div>
+            
+            <div id="ad-footer" class="ad-container"></div>
+        </main>
+    </div>
+    
+    
+    {% include /ads/gobloggugel/default.html %}
+{% include footer.html %}
+
+</body>
+</html>

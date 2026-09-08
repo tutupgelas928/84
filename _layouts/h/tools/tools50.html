@@ -1,0 +1,120 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSON Formatter</title>
+    <meta name="description" content="Format, validate, and beautify JSON data.">
+    <link rel="stylesheet" href="/site/tools/02/style.css">
+    <script src="/site/tools/02/config.js"></script>
+{% include head.html %}
+</head>
+<body data-page-name="JSON Formatter" data-tool-id="json-formatter">
+    <div id="site-header"></div>
+    
+    <div class="layout">
+        <div id="site-sidebar"></div>
+        
+        <main class="main-content">
+        <details><summary>...</summary>
+        {{content}}
+        </details>
+            <div id="breadcrumb"></div>
+            
+            <div class="tool-page">
+                <h1>JSON Formatter</h1>
+                <p class="tool-intro">Format, validate, and beautify JSON data.</p>
+                
+                <div class="tool-box">
+                    <label>JSON Input</label>
+                    <textarea id="jsonInput" placeholder="Paste JSON here..." style="font-family: monospace;"></textarea>
+                    
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 0.8rem;">
+                        <button class="btn btn-primary" onclick="formatJSON()">Format</button>
+                        <button class="btn btn-secondary" onclick="minifyJSON()">Minify</button>
+                        <button class="btn btn-secondary" onclick="validateJSON()">Validate</button>
+                        <button class="btn btn-copy" onclick="copyResult()">Copy</button>
+                        <button class="btn btn-secondary" onclick="sampleJSON()">Sample</button>
+                    </div>
+                </div>
+                
+                <div class="tool-box">
+                    <label>Output</label>
+                    <div id="jsonStatus" style="margin-bottom: 0.5rem;"></div>
+                    <textarea id="jsonOutput" readonly style="font-family: monospace; min-height: 150px;"></textarea>
+                </div>
+                
+                <div id="ad-content" class="ad-container"></div>
+                
+                <section class="content-section">
+                    <h2>Related Tools</h2>
+                    <div class="related-tools" id="related-tools"></div>
+                </section>
+            </div>
+        </main>
+    </div>
+    
+    
+    {% include /ads/gobloggugel/default.html %}
+{% include footer.html %}
+
+    
+    <script>
+        function formatJSON() {
+            const input = document.getElementById('jsonInput').value;
+            if (!input.trim()) { alert('Paste JSON first.'); return; }
+            
+            try {
+                const parsed = JSON.parse(input);
+                document.getElementById('jsonOutput').value = JSON.stringify(parsed, null, 2);
+                showStatus('Valid JSON', true);
+            } catch(e) {
+                showStatus('Error: ' + e.message, false);
+            }
+        }
+        
+        function minifyJSON() {
+            const input = document.getElementById('jsonInput').value;
+            if (!input.trim()) { alert('Paste JSON first.'); return; }
+            
+            try {
+                const parsed = JSON.parse(input);
+                document.getElementById('jsonOutput').value = JSON.stringify(parsed);
+                showStatus('Minified', true);
+            } catch(e) {
+                showStatus('Error: ' + e.message, false);
+            }
+        }
+        
+        function validateJSON() {
+            const input = document.getElementById('jsonInput').value;
+            if (!input.trim()) { alert('Paste JSON first.'); return; }
+            
+            try {
+                JSON.parse(input);
+                showStatus('Valid JSON', true);
+            } catch(e) {
+                showStatus('Invalid: ' + e.message, false);
+            }
+        }
+        
+        function showStatus(msg, ok) {
+            const status = document.getElementById('jsonStatus');
+            status.textContent = msg;
+            status.style.color = ok ? 'var(--success)' : 'var(--danger)';
+        }
+        
+        function copyResult() {
+            const t = document.getElementById('jsonOutput').value;
+            if (!t) { alert('Format first.'); return; }
+            navigator.clipboard.writeText(t).then(() => alert('Copied!'));
+        }
+        
+        function sampleJSON() {
+            document.getElementById('jsonInput').value = '{"name":"John","age":30,"hobbies":["reading","coding"],"address":{"city":"New York","zip":"10001"}}';
+            formatJSON();
+        }
+    </script>
+</body>
+</html>

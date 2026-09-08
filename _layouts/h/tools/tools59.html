@@ -1,0 +1,91 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Regex Playground</title>
+    <meta name="description" content="Test regular expressions with real-time highlighting.">
+    <link rel="stylesheet" href="/site/tools/02/style.css">
+    <script src="/site/tools/02/config.js"></script>
+{% include head.html %}
+</head>
+<body data-page-name="Regex Playground" data-tool-id="regex-playground">
+    <div id="site-header"></div>
+    
+    <div class="layout">
+        <div id="site-sidebar"></div>
+        
+        <main class="main-content">
+        <details><summary>...</summary>
+        {{content}}
+        </details>
+            <div id="breadcrumb"></div>
+            
+            <div class="tool-page">
+                <h1>Regex Playground</h1>
+                <p class="tool-intro">Test regular expressions with real-time highlighting.</p>
+                
+                <div class="tool-box">
+                    <label>Pattern</label>
+                    <input type="text" id="pattern" placeholder="e.g., \\d{3}-\\d{4}" oninput="testRegex()">
+                    
+                    <label style="margin-top: 0.8rem;">Flags</label>
+                    <input type="text" id="flags" placeholder="e.g., g, i, m" value="g" oninput="testRegex()" style="width: 100px;">
+                    
+                    <label style="margin-top: 0.8rem;">Test String</label>
+                    <textarea id="testString" placeholder="Type text to test against..." oninput="testRegex()"></textarea>
+                </div>
+                
+                <div class="tool-box">
+                    <label>Matches</label>
+                    <div class="output-box" id="matches">-</div>
+                    
+                    <label style="margin-top: 1rem;">Highlighted</label>
+                    <div class="output-box" id="highlighted">-</div>
+                </div>
+                
+                <div id="ad-content" class="ad-container"></div>
+                
+                <section class="content-section">
+                    <h2>Related Tools</h2>
+                    <div class="related-tools" id="related-tools"></div>
+                </section>
+            </div>
+        </main>
+    </div>
+    
+    
+    {% include /ads/gobloggugel/default.html %}
+{% include footer.html %}
+
+    
+    <script>
+        function testRegex() {
+            const pattern = document.getElementById('pattern').value;
+            const flags = document.getElementById('flags').value;
+            const testString = document.getElementById('testString').value;
+            
+            if (!pattern || !testString) return;
+            
+            try {
+                const regex = new RegExp(pattern, flags);
+                const matches = testString.match(regex);
+                
+                if (matches) {
+                    document.getElementById('matches').textContent = matches.map((m, i) => `[${i}] ${m}`).join('\n');
+                    
+                    const highlighted = testString.replace(regex, match => `<mark>${match}</mark>`);
+                    document.getElementById('highlighted').innerHTML = highlighted;
+                } else {
+                    document.getElementById('matches').textContent = 'No matches';
+                    document.getElementById('highlighted').textContent = testString;
+                }
+            } catch(e) {
+                document.getElementById('matches').textContent = 'Error: ' + e.message;
+                document.getElementById('highlighted').textContent = testString;
+            }
+        }
+    </script>
+</body>
+</html>

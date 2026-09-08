@@ -1,0 +1,97 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plagiarism Checker</title>
+    <meta name="description" content="Client-side text similarity checker.">
+    <link rel="stylesheet" href="/site/tools/02/style.css">
+    <script src="/site/tools/02/config.js"></script>
+{% include head.html %}
+</head>
+<body data-page-name="Plagiarism Checker" data-tool-id="plagiarism">
+    <div id="site-header"></div>
+    
+    <div class="layout">
+        <div id="site-sidebar"></div>
+        
+        <main class="main-content">
+        <details><summary>...</summary>
+        {{content}}
+        </details>
+            <div id="breadcrumb"></div>
+            
+            <div class="tool-page">
+                <h1>Plagiarism Checker</h1>
+                <p class="tool-intro">Client-side text similarity checker.</p>
+                
+                <div class="tool-box">
+                    <label>Text 1</label>
+                    <textarea id="text1" placeholder="Paste first text..."></textarea>
+                    
+                    <label style="margin-top: 0.8rem;">Text 2</label>
+                    <textarea id="text2" placeholder="Paste second text..."></textarea>
+                    
+                    <div style="margin-top: 0.8rem;">
+                        <button class="btn btn-primary" onclick="compare()">Compare</button>
+                        <button class="btn btn-secondary" onclick="clearAll()">Clear</button>
+                    </div>
+                </div>
+                
+                <div class="tool-box">
+                    <label>Similarity Result</label>
+                    <div class="output-box" id="similarityResult">-</div>
+                </div>
+                
+                <div id="ad-content" class="ad-container"></div>
+                
+                <section class="content-section">
+                    <h2>Related Tools</h2>
+                    <div class="related-tools" id="related-tools"></div>
+                </section>
+            </div>
+        </main>
+    </div>
+    
+    
+    {% include /ads/gobloggugel/default.html %}
+{% include footer.html %}
+
+    
+    <script>
+        function jaccardSimilarity(text1, text2) {
+            const set1 = new Set(text1.toLowerCase().split(/\s+/).map(w => w.replace(/[^a-z]/g, '')).filter(w => w.length > 3));
+            const set2 = new Set(text2.toLowerCase().split(/\s+/).map(w => w.replace(/[^a-z]/g, '')).filter(w => w.length > 3));
+            
+            const intersection = [...set1].filter(w => set2.has(w));
+            const union = new Set([...set1, ...set2]);
+            
+            return union.size === 0 ? 0 : (intersection.length / union.size) * 100;
+        }
+        
+        function compare() {
+            const text1 = document.getElementById('text1').value.trim();
+            const text2 = document.getElementById('text2').value.trim();
+            
+            if (!text1 || !text2) { alert('Paste both texts.'); return; }
+            
+            const similarity = jaccardSimilarity(text1, text2);
+            
+            let result = `Similarity: ${similarity.toFixed(2)}%\n\n`;
+            
+            if (similarity > 70) result += 'HIGH SIMILARITY - Possible plagiarism';
+            else if (similarity > 40) result += 'MODERATE SIMILARITY - Some common words';
+            else result += 'LOW SIMILARITY - Likely original';
+            
+            document.getElementById('similarityResult').textContent = result;
+        }
+        
+        function clearAll() {
+            document.getElementById('text1').value = '';
+            document.getElementById('text2').value = '';
+            document.getElementById('similarityResult').textContent = '-';
+        }
+    </script>
+</body>
+</html>

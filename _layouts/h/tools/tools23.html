@@ -1,0 +1,48 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Designer Tools</title>
+    <meta name="description" content="Designer tools - CSS generators, gradient, flexbox, and more.">
+    <link rel="stylesheet" href="/site/tools/02/style.css">
+    <script src="/site/tools/02/config.js"></script>
+{% include head.html %}
+</head>
+<body data-page-name="Designer Tools" data-category="designer">
+    <div id="site-header"></div>
+    
+    <div class="layout">
+        <div id="site-sidebar"></div>
+        
+        <main class="main-content">
+        <details><summary>...</summary>
+        {{content}}
+        </details>
+            <div id="breadcrumb"></div>
+            
+            <div class="tool-page">
+                <h1>Designer Tools</h1>
+                <p class="tool-intro">10 tools for designers. CSS generators, visual builders, and more.</p>
+                
+                <div id="ad-header" class="ad-container"></div>
+                
+                <div class="tools-grid" id="tools-grid"></div>
+                
+                <div id="ad-content" class="ad-container"></div>
+                
+                <section class="content-section">
+                    <h2>Other Categories</h2>
+                    <div class="category-grid" id="category-grid"></div>
+                </section>
+            </div>
+        </main>
+    </div>
+    
+    
+    {% include /ads/gobloggugel/default.html %}
+{% include footer.html %}
+
+</body>
+</html>

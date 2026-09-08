@@ -1,0 +1,95 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RSA Key Generator</title>
+    <meta name="description" content="Generate RSA key pairs.">
+    <link rel="stylesheet" href="/site/tools/02/style.css">
+    <script src="/site/tools/02/config.js"></script>
+{% include head.html %}
+</head>
+<body data-page-name="RSA Generator" data-tool-id="rsa-generator">
+    <div id="site-header"></div>
+    
+    <div class="layout">
+        <div id="site-sidebar"></div>
+        
+        <main class="main-content">
+        <details><summary>...</summary>
+        {{content}}
+        </details>
+            <div id="breadcrumb"></div>
+            
+            <div class="tool-page">
+                <h1>RSA Key Generator</h1>
+                <p class="tool-intro">Generate RSA key pairs.</p>
+                
+                <div class="tool-box">
+                    <label>Key Size</label>
+                    <select id="keySize">
+                        <option value="1024">1024 bits</option>
+                        <option value="2048" selected>2048 bits</option>
+                        <option value="4096">4096 bits</option>
+                    </select>
+                    
+                    <div style="margin-top: 0.8rem;">
+                        <button class="btn btn-primary" onclick="generateKeys()">Generate Keys</button>
+                    </div>
+                </div>
+                
+                <div class="tool-box">
+                    <label>Public Key</label>
+                    <div class="output-box" id="publicKey">-</div>
+                    
+                    <label style="margin-top: 1rem;">Private Key</label>
+                    <div class="output-box" id="privateKey">-</div>
+                </div>
+                
+                <div id="ad-content" class="ad-container"></div>
+                
+                <section class="content-section">
+                    <h2>Related Tools</h2>
+                    <div class="related-tools" id="related-tools"></div>
+                </section>
+            </div>
+        </main>
+    </div>
+    
+    
+    {% include /ads/gobloggugel/default.html %}
+{% include footer.html %}
+
+    
+    <script>
+        async function generateKeys() {
+            const keySize = parseInt(document.getElementById('keySize').value);
+            
+            document.getElementById('publicKey').textContent = 'Generating...';
+            document.getElementById('privateKey').textContent = 'Generating...';
+            
+            try {
+                const keyPair = await crypto.subtle.generateKey(
+                    {
+                        name: 'RSASSA-PKCS1-v1_5',
+                        modulusLength: keySize,
+                        publicExponent: new Uint8Array([1, 0, 1]),
+                        hash: 'SHA-256'
+                    },
+                    true,
+                    ['sign', 'verify']
+                );
+                
+                const publicKey = await crypto.subtle.exportKey('spki', keyPair.publicKey);
+                const privateKey = await crypto.subtle.exportKey('pkcs8', keyPair.privateKey);
+                
+                document.getElementById('publicKey').textContent = btoa(String.fromCharCode(...new Uint8Array(publicKey)));
+                document.getElementById('privateKey').textContent = btoa(String.fromCharCode(...new Uint8Array(privateKey)));
+            } catch(e) {
+                alert('Error: ' + e.message);
+            }
+        }
+    </script>
+</body>
+</html>

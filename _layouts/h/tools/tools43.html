@@ -1,0 +1,82 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hash Suite</title>
+    <meta name="description" content="Generate SHA-1, SHA-256, SHA-384, SHA-512 hashes.">
+    <link rel="stylesheet" href="/site/tools/02/style.css">
+    <script src="/site/tools/02/config.js"></script>
+{% include head.html %}
+</head>
+<body data-page-name="Hash Suite" data-tool-id="hash-suite">
+    <div id="site-header"></div>
+    
+    <div class="layout">
+        <div id="site-sidebar"></div>
+        
+        <main class="main-content">
+        <details><summary>...</summary>
+        {{content}}
+        </details>
+            <div id="breadcrumb"></div>
+            
+            <div class="tool-page">
+                <h1>Hash Suite</h1>
+                <p class="tool-intro">Generate multiple hash formats.</p>
+                
+                <div class="tool-box">
+                    <label>Text</label>
+                    <textarea id="textInput" placeholder="Type or paste text here..." oninput="generateAll()"></textarea>
+                </div>
+                
+                <div class="tool-box">
+                    <label>SHA-1</label>
+                    <div class="output-box" id="sha1">-</div>
+                    
+                    <label style="margin-top: 1rem;">SHA-256</label>
+                    <div class="output-box" id="sha256">-</div>
+                    
+                    <label style="margin-top: 1rem;">SHA-384</label>
+                    <div class="output-box" id="sha384">-</div>
+                    
+                    <label style="margin-top: 1rem;">SHA-512</label>
+                    <div class="output-box" id="sha512">-</div>
+                </div>
+                
+                <div id="ad-content" class="ad-container"></div>
+                
+                <section class="content-section">
+                    <h2>Related Tools</h2>
+                    <div class="related-tools" id="related-tools"></div>
+                </section>
+            </div>
+        </main>
+    </div>
+    
+    
+    {% include /ads/gobloggugel/default.html %}
+{% include footer.html %}
+
+    
+    <script>
+        async function generateHash(text, algo) {
+            const encoder = new TextEncoder();
+            const data = encoder.encode(text);
+            const hash = await crypto.subtle.digest(algo, data);
+            return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, '0')).join('');
+        }
+        
+        async function generateAll() {
+            const text = document.getElementById('textInput').value;
+            if (!text) return;
+            
+            document.getElementById('sha1').textContent = await generateHash(text, 'SHA-1');
+            document.getElementById('sha256').textContent = await generateHash(text, 'SHA-256');
+            document.getElementById('sha384').textContent = await generateHash(text, 'SHA-384');
+            document.getElementById('sha512').textContent = await generateHash(text, 'SHA-512');
+        }
+    </script>
+</body>
+</html>

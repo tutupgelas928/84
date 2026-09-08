@@ -1,0 +1,103 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML Prettifier</title>
+    <meta name="description" content="Format HTML code with proper indentation.">
+    <link rel="stylesheet" href="/site/tools/02/style.css">
+    <script src="/site/tools/02/config.js"></script>
+{% include head.html %}
+</head>
+<body data-page-name="HTML Prettifier" data-tool-id="html-prettifier">
+    <div id="site-header"></div>
+    
+    <div class="layout">
+        <div id="site-sidebar"></div>
+        
+        <main class="main-content">
+        <details><summary>...</summary>
+        {{content}}
+        </details>
+            <div id="breadcrumb"></div>
+            
+            <div class="tool-page">
+                <h1>HTML Prettifier</h1>
+                <p class="tool-intro">Format HTML code with proper indentation.</p>
+                
+                <div class="tool-box">
+                    <label>HTML Code</label>
+                    <textarea id="htmlInput" placeholder="Paste HTML here..." style="font-family: monospace;"></textarea>
+                    
+                    <div style="margin-top: 0.8rem;">
+                        <button class="btn btn-primary" onclick="formatHTML()">Format</button>
+                        <button class="btn btn-copy" onclick="copyResult()">Copy</button>
+                        <button class="btn btn-secondary" onclick="clearAll()">Clear</button>
+                    </div>
+                </div>
+                
+                <div class="tool-box">
+                    <label>Formatted</label>
+                    <div class="output-box" id="htmlOutput">-</div>
+                </div>
+                
+                <div id="ad-content" class="ad-container"></div>
+                
+                <section class="content-section">
+                    <h2>Related Tools</h2>
+                    <div class="related-tools" id="related-tools"></div>
+                </section>
+            </div>
+        </main>
+    </div>
+    
+    
+    {% include /ads/gobloggugel/default.html %}
+{% include footer.html %}
+
+    
+    <script>
+        function formatHTML() {
+            let html = document.getElementById('htmlInput').value;
+            if (!html.trim()) { alert('Paste HTML first.'); return; }
+            
+            html = html.replace(/>\s+</g, '><');
+            
+            let formatted = '';
+            let indent = 0;
+            const tags = html.split(/(?=<)|(?<=>)/);
+            
+            tags.forEach(tag => {
+                tag = tag.trim();
+                if (!tag) return;
+                
+                if (tag.startsWith('</')) {
+                    indent = Math.max(0, indent - 1);
+                    formatted += '  '.repeat(indent) + tag + '\n';
+                } else if (tag.startsWith('<') && tag.endsWith('/>')) {
+                    formatted += '  '.repeat(indent) + tag + '\n';
+                } else if (tag.startsWith('<') && !tag.startsWith('<!')) {
+                    formatted += '  '.repeat(indent) + tag + '\n';
+                    indent++;
+                } else {
+                    formatted += '  '.repeat(indent) + tag + '\n';
+                }
+            });
+            
+            document.getElementById('htmlOutput').textContent = formatted.trim();
+        }
+        
+        function copyResult() {
+            const t = document.getElementById('htmlOutput').textContent;
+            if (t === '-') { alert('Format first.'); return; }
+            navigator.clipboard.writeText(t).then(() => alert('Copied!'));
+        }
+        
+        function clearAll() {
+            document.getElementById('htmlInput').value = '';
+            document.getElementById('htmlOutput').textContent = '-';
+        }
+    </script>
+</body>
+</html>

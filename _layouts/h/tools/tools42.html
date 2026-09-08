@@ -1,0 +1,86 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hash Generator</title>
+    <meta name="description" content="Generate SHA-256 and SHA-512 hashes.">
+    <link rel="stylesheet" href="/site/tools/02/style.css">
+    <script src="/site/tools/02/config.js"></script>
+{% include head.html %}
+</head>
+<body data-page-name="Hash Generator" data-tool-id="hash-suite">
+    <div id="site-header"></div>
+    
+    <div class="layout">
+        <div id="site-sidebar"></div>
+        
+        <main class="main-content">
+        <details><summary>...</summary>
+        {{content}}
+        </details>
+            <div id="breadcrumb"></div>
+            
+            <div class="tool-page">
+                <h1>Hash Generator</h1>
+                <p class="tool-intro">Generate SHA-256 and SHA-512 hashes.</p>
+                
+                <div class="tool-box">
+                    <label>Input</label>
+                    <textarea id="input" placeholder="Type or paste text here..."></textarea>
+                    
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 0.8rem;">
+                        <button class="btn btn-primary" onclick="generate('SHA-256')">SHA-256</button>
+                        <button class="btn btn-primary" onclick="generate('SHA-512')">SHA-512</button>
+                        <button class="btn btn-copy" onclick="copyResult()">Copy</button>
+                        <button class="btn btn-secondary" onclick="clearAll()">Clear</button>
+                    </div>
+                </div>
+                
+                <div class="tool-box">
+                    <label>Hash Result</label>
+                    <div class="output-box" id="output">-</div>
+                </div>
+                
+                <div id="ad-content" class="ad-container"></div>
+                
+                <section class="content-section">
+                    <h2>Related Tools</h2>
+                    <div class="related-tools" id="related-tools"></div>
+                </section>
+            </div>
+        </main>
+    </div>
+    
+    
+    {% include /ads/gobloggugel/default.html %}
+{% include footer.html %}
+
+    
+    <script>
+        async function generate(algo) {
+            const t = document.getElementById('input').value;
+            if (!t) { alert('Enter text first.'); return; }
+            
+            const encoder = new TextEncoder();
+            const data = encoder.encode(t);
+            const hash = await crypto.subtle.digest(algo, data);
+            const hex = Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2,'0')).join('');
+            
+            document.getElementById('output').textContent = hex;
+        }
+        
+        function copyResult() {
+            const t = document.getElementById('output').textContent;
+            if (t === '-') { alert('No result.'); return; }
+            navigator.clipboard.writeText(t).then(() => alert('Copied!'));
+        }
+        
+        function clearAll() {
+            document.getElementById('input').value = '';
+            document.getElementById('output').textContent = '-';
+        }
+    </script>
+</body>
+</html>

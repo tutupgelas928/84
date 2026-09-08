@@ -1,0 +1,110 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flexbox Playground</title>
+    <meta name="description" content="Visual flexbox tester and generator.">
+    <link rel="stylesheet" href="/site/tools/02/style.css">
+    <script src="/site/tools/02/config.js"></script>
+{% include head.html %}
+</head>
+<body data-page-name="Flexbox Playground" data-tool-id="flexbox">
+    <div id="site-header"></div>
+    
+    <div class="layout">
+        <div id="site-sidebar"></div>
+        
+        <main class="main-content">
+        <details><summary>...</summary>
+        {{content}}
+        </details>
+            <div id="breadcrumb"></div>
+            
+            <div class="tool-page">
+                <h1>Flexbox Playground</h1>
+                <p class="tool-intro">Visual flexbox tester.</p>
+                
+                <div class="tool-box">
+                    <label>justify-content</label>
+                    <select id="justify" onchange="updateFlex()">
+                        <option value="flex-start">flex-start</option>
+                        <option value="center">center</option>
+                        <option value="flex-end">flex-end</option>
+                        <option value="space-between">space-between</option>
+                        <option value="space-around">space-around</option>
+                        <option value="space-evenly">space-evenly</option>
+                    </select>
+                    
+                    <label style="margin-top: 0.8rem;">align-items</label>
+                    <select id="align" onchange="updateFlex()">
+                        <option value="flex-start">flex-start</option>
+                        <option value="center">center</option>
+                        <option value="flex-end">flex-end</option>
+                        <option value="stretch">stretch</option>
+                    </select>
+                    
+                    <label style="margin-top: 0.8rem;">flex-direction</label>
+                    <select id="direction" onchange="updateFlex()">
+                        <option value="row">row</option>
+                        <option value="column">column</option>
+                        <option value="row-reverse">row-reverse</option>
+                        <option value="column-reverse">column-reverse</option>
+                    </select>
+                </div>
+                
+                <div class="tool-box">
+                    <div id="preview" style="display: flex; gap: 10px; min-height: 200px; background: var(--bg); border-radius: 8px; padding: 1rem;">
+                        <div style="width: 60px; height: 60px; background: var(--primary); border-radius: 6px;"></div>
+                        <div style="width: 60px; height: 60px; background: var(--secondary); border-radius: 6px;"></div>
+                        <div style="width: 60px; height: 60px; background: var(--success); border-radius: 6px;"></div>
+                    </div>
+                </div>
+                
+                <div class="tool-box">
+                    <label>CSS Code</label>
+                    <div class="output-box" id="cssOutput">-</div>
+                    <button class="btn btn-copy" onclick="copyCSS()">Copy CSS</button>
+                </div>
+                
+                <div id="ad-content" class="ad-container"></div>
+                
+                <section class="content-section">
+                    <h2>Related Tools</h2>
+                    <div class="related-tools" id="related-tools"></div>
+                </section>
+            </div>
+        </main>
+    </div>
+    
+    
+    {% include /ads/gobloggugel/default.html %}
+{% include footer.html %}
+
+    
+    <script>
+        function updateFlex() {
+            const justify = document.getElementById('justify').value;
+            const align = document.getElementById('align').value;
+            const direction = document.getElementById('direction').value;
+            
+            const preview = document.getElementById('preview');
+            preview.style.justifyContent = justify;
+            preview.style.alignItems = align;
+            preview.style.flexDirection = direction;
+            
+            document.getElementById('cssOutput').textContent = 
+                `display: flex;\njustify-content: ${justify};\nalign-items: ${align};\nflex-direction: ${direction};`;
+        }
+        
+        function copyCSS() {
+            const t = document.getElementById('cssOutput').textContent;
+            if (t === '-') { alert('Generate first.'); return; }
+            navigator.clipboard.writeText(t).then(() => alert('Copied!'));
+        }
+        
+        updateFlex();
+    </script>
+</body>
+</html>

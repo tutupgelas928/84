@@ -1,0 +1,90 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code Diff Checker</title>
+    <meta name="description" content="Compare two code blocks line by line.">
+    <link rel="stylesheet" href="/site/tools/02/style.css">
+    <script src="/site/tools/02/config.js"></script>
+{% include head.html %}
+</head>
+<body data-page-name="Code Diff" data-tool-id="code-diff">
+    <div id="site-header"></div>
+    
+    <div class="layout">
+        <div id="site-sidebar"></div>
+        
+        <main class="main-content">
+        <details><summary>...</summary>
+        {{content}}
+        </details>
+            <div id="breadcrumb"></div>
+            
+            <div class="tool-page">
+                <h1>Code Diff Checker</h1>
+                <p class="tool-intro">Compare two code blocks line by line.</p>
+                
+                <div class="tool-box">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div>
+                            <label>Original</label>
+                            <textarea id="original" placeholder="Paste original code..."></textarea>
+                        </div>
+                        <div>
+                            <label>Modified</label>
+                            <textarea id="modified" placeholder="Paste modified code..."></textarea>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 0.8rem;">
+                        <button class="btn btn-primary" onclick="compare()">Compare</button>
+                    </div>
+                </div>
+                
+                <div class="tool-box">
+                    <label>Diff Result</label>
+                    <div class="output-box" id="diffResult">-</div>
+                </div>
+                
+                <div id="ad-content" class="ad-container"></div>
+                
+                <section class="content-section">
+                    <h2>Related Tools</h2>
+                    <div class="related-tools" id="related-tools"></div>
+                </section>
+            </div>
+        </main>
+    </div>
+    
+    
+    {% include /ads/gobloggugel/default.html %}
+{% include footer.html %}
+
+    
+    <script>
+        function compare() {
+            const original = document.getElementById('original').value.split('\n');
+            const modified = document.getElementById('modified').value.split('\n');
+            const maxLen = Math.max(original.length, modified.length);
+            
+            let result = [];
+            
+            for (let i = 0; i < maxLen; i++) {
+                const orig = original[i] || '';
+                const mod = modified[i] || '';
+                
+                if (orig === mod) {
+                    result.push(`  ${i+1}: ${orig}`);
+                } else {
+                    if (orig) result.push(`- ${i+1}: ${orig}`);
+                    if (mod) result.push(`+ ${i+1}: ${mod}`);
+                }
+            }
+            
+            document.getElementById('diffResult').textContent = result.join('\n') || 'No differences found';
+        }
+    </script>
+</body>
+</html>

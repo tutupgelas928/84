@@ -1,0 +1,101 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gradient Generator</title>
+    <meta name="description" content="CSS gradient generator.">
+    <link rel="stylesheet" href="/site/tools/02/style.css">
+    <script src="/site/tools/02/config.js"></script>
+{% include head.html %}
+</head>
+<body data-page-name="Gradient Generator" data-tool-id="gradient">
+    <div id="site-header"></div>
+    
+    <div class="layout">
+        <div id="site-sidebar"></div>
+        
+        <main class="main-content">
+        <details><summary>...</summary>
+        {{content}}
+        </details>
+            <div id="breadcrumb"></div>
+            
+            <div class="tool-page">
+                <h1>Gradient Generator</h1>
+                <p class="tool-intro">CSS gradient generator.</p>
+                
+                <div class="tool-box">
+                    <label>Color 1</label>
+                    <input type="color" id="color1" value="#6366f1" oninput="updateGradient()">
+                    
+                    <label style="margin-top: 0.8rem;">Color 2</label>
+                    <input type="color" id="color2" value="#8b5cf6" oninput="updateGradient()">
+                    
+                    <label style="margin-top: 0.8rem;">Angle</label>
+                    <input type="range" id="angle" min="0" max="360" value="135" oninput="updateGradient()">
+                    <span id="angleVal">135</span>deg
+                    
+                    <label style="margin-top: 0.8rem;">Type</label>
+                    <select id="type" onchange="updateGradient()">
+                        <option value="linear">Linear</option>
+                        <option value="radial">Radial</option>
+                    </select>
+                </div>
+                
+                <div class="tool-box">
+                    <div id="preview" style="height: 200px; border-radius: 8px;"></div>
+                </div>
+                
+                <div class="tool-box">
+                    <label>CSS Code</label>
+                    <div class="output-box" id="cssOutput">-</div>
+                    <button class="btn btn-copy" onclick="copyCSS()">Copy CSS</button>
+                </div>
+                
+                <div id="ad-content" class="ad-container"></div>
+                
+                <section class="content-section">
+                    <h2>Related Tools</h2>
+                    <div class="related-tools" id="related-tools"></div>
+                </section>
+            </div>
+        </main>
+    </div>
+    
+    
+    {% include /ads/gobloggugel/default.html %}
+{% include footer.html %}
+
+    
+    <script>
+        function updateGradient() {
+            const c1 = document.getElementById('color1').value;
+            const c2 = document.getElementById('color2').value;
+            const angle = document.getElementById('angle').value;
+            const type = document.getElementById('type').value;
+            
+            document.getElementById('angleVal').textContent = angle;
+            
+            let gradient;
+            if (type === 'linear') {
+                gradient = `linear-gradient(${angle}deg, ${c1}, ${c2})`;
+            } else {
+                gradient = `radial-gradient(circle, ${c1}, ${c2})`;
+            }
+            
+            document.getElementById('preview').style.background = gradient;
+            document.getElementById('cssOutput').textContent = `background: ${gradient};`;
+        }
+        
+        function copyCSS() {
+            const t = document.getElementById('cssOutput').textContent;
+            if (t === '-') { alert('Generate first.'); return; }
+            navigator.clipboard.writeText(t).then(() => alert('Copied!'));
+        }
+        
+        updateGradient();
+    </script>
+</body>
+</html>

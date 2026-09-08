@@ -1,0 +1,152 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AES Encryptor</title>
+    <meta name="description" content="Encrypt and decrypt text with AES-GCM.">
+    <link rel="stylesheet" href="/site/tools/02/style.css">
+    <script src="/site/tools/02/config.js"></script>
+{% include head.html %}
+</head>
+<body data-page-name="AES Encryptor" data-tool-id="aes-encryptor">
+    <div id="site-header"></div>
+    
+    <div class="layout">
+        <div id="site-sidebar"></div>
+        
+        <main class="main-content">
+        <details><summary>...</summary>
+        {{content}}
+        </details>
+            <div id="breadcrumb"></div>
+            
+            <div class="tool-page">
+                <h1>AES Encryptor</h1>
+                <p class="tool-intro">Encrypt and decrypt text using AES-GCM.</p>
+                
+                <div class="tool-box">
+                    <label>Secret Key</label>
+                    <input type="text" id="secretKey" placeholder="Enter secret key...">
+                    
+                    <label style="margin-top: 0.8rem;">Text</label>
+                    <textarea id="textInput" placeholder="Type or paste text here..."></textarea>
+                    
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 0.8rem;">
+                        <button class="btn btn-primary" onclick="encrypt()">Encrypt</button>
+                        <button class="btn btn-secondary" onclick="decrypt()">Decrypt</button>
+                        <button class="btn btn-copy" onclick="copyResult()">Copy</button>
+                        <button class="btn btn-secondary" onclick="clearAll()">Clear</button>
+                    </div>
+                </div>
+                
+                <div class="tool-box">
+                    <label>Result</label>
+                    <div class="output-box" id="resultOutput">-</div>
+                </div>
+                
+                <div id="ad-content" class="ad-container"></div>
+                
+                <section class="content-section">
+                    <h2>Related Tools</h2>
+                    <div class="related-tools" id="related-tools"></div>
+                </section>
+            </div>
+        </main>
+    </div>
+    
+    
+    {% include /ads/gobloggugel/default.html %}
+{% include footer.html %}
+
+    
+    <script>
+        async function getKey(secretKey) {
+            const encoder = new TextEncoder();
+            const keyMaterial = await crypto.subtle.importKey(
+                'raw',
+                encoder.encode(secretKey),
+                'PBKDF2',
+                false,
+                ['deriveKey']
+            );
+            
+            return await crypto.subtle.deriveKey(
+                { name: 'PBKDF2', salt: new Uint8Array(16), iterations: 100000, hash: 'SHA-256' },
+                keyMaterial,
+                { name: 'AES-GCM', length: 256 },
+                false,
+                ['encrypt', 'decrypt']
+            );
+        }
+        
+        async function encrypt() {
+            const key = document.getElementById('secretKey').value;
+            const text = document.getElementById('textInput').value;
+            
+            if (!key) { alert('Enter secret key.'); return; }
+            if (!text) { alert('Enter text to encrypt.'); return; }
+            
+            try {
+                const cryptoKey = await getKey(key);
+                const iv = crypto.getRandomValues(new Uint8Array(12));
+                const encoder = new TextEncoder();
+                
+                const encrypted = await crypto.subtle.encrypt(
+                    { name: 'AES-GCM', iv },
+                    cryptoKey,
+                    encoder.encode(text)
+                );
+                
+                const result = {
+                    iv: Array.from(iv).map(b => b.toString(16).padStart(2, '0')).join(''),
+                    data: Array.from(new Uint8Array(encrypted)).map(b => b.toString(16).padStart(2, '0')).join('')
+                };
+                
+                document.getElementById('resultOutput').textContent = JSON.stringify(result);
+            } catch(e) {
+                alert('Error: ' + e.message);
+            }
+        }
+        
+        async function decrypt() {
+            const key = document.getElementById('secretKey').value;
+            const input = document.getElementById('textInput').value.trim();
+            
+            if (!key) { alert('Enter secret key.'); return; }
+            if (!input) { alert('Paste encrypted data.'); return; }
+            
+            try {
+                const parsed = JSON.parse(input);
+                const iv = new Uint8Array(parsed.iv.match(/.{2}/g).map(b => parseInt(b, 16)));
+                const data = new Uint8Array(parsed.data.match(/.{2}/g).map(b => parseInt(b, 16)));
+                
+                const cryptoKey = await getKey(key);
+                const decrypted = await crypto.subtle.decrypt(
+                    { name: 'AES-GCM', iv },
+                    cryptoKey,
+                    data
+                );
+                
+                const decoder = new TextDecoder();
+                document.getElementById('resultOutput').textContent = decoder.decode(decrypted);
+            } catch(e) {
+                alert('Error: ' + e.message);
+            }
+        }
+        
+        function copyResult() {
+            const t = document.getElementById('resultOutput').textContent;
+            if (t === '-') { alert('No result.'); return; }
+            navigator.clipboard.writeText(t).then(() => alert('Copied!'));
+        }
+        
+        function clearAll() {
+            document.getElementById('secretKey').value = '';
+            document.getElementById('textInput').value = '';
+            document.getElementById('resultOutput').textContent = '-';
+        }
+    </script>
+</body>
+</html>

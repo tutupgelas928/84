@@ -1,0 +1,150 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animation Generator</title>
+    <meta name="description" content="CSS keyframe animation generator.">
+    <link rel="stylesheet" href="/site/tools/02/style.css">
+    <script src="/site/tools/02/config.js"></script>
+{% include head.html %}
+</head>
+<body data-page-name="Animation Generator" data-tool-id="animation">
+    <div id="site-header"></div>
+    
+    <div class="layout">
+        <div id="site-sidebar"></div>
+        
+        <main class="main-content">
+        <details><summary>...</summary>
+        {{content}}
+        </details>
+            <div id="breadcrumb"></div>
+            
+            <div class="tool-page">
+                <h1>Animation Generator</h1>
+                <p class="tool-intro">CSS keyframe animation generator.</p>
+                
+                <div class="tool-box">
+                    <label>Animation Name</label>
+                    <input type="text" id="animName" value="myAnimation" oninput="updateAnimation()">
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div>
+                            <label>Duration</label>
+                            <input type="range" id="duration" min="0.1" max="5" step="0.1" value="2" oninput="updateAnimation()">
+                            <span id="durationVal">2</span>s
+                        </div>
+                        <div>
+                            <label>Timing</label>
+                            <select id="timing" onchange="updateAnimation()">
+                                <option value="ease">ease</option>
+                                <option value="linear">linear</option>
+                                <option value="ease-in">ease-in</option>
+                                <option value="ease-out">ease-out</option>
+                                <option value="ease-in-out">ease-in-out</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label>Iterations</label>
+                            <select id="iterations" onchange="updateAnimation()">
+                                <option value="infinite">infinite</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label>Type</label>
+                            <select id="animType" onchange="updateAnimation()">
+                                <option value="fade">Fade</option>
+                                <option value="slide">Slide</option>
+                                <option value="bounce">Bounce</option>
+                                <option value="rotate">Rotate</option>
+                                <option value="pulse">Pulse</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tool-box" style="text-align: center; padding: 3rem;">
+                    <div id="preview" style="width: 80px; height: 80px; background: linear-gradient(135deg, var(--primary), var(--secondary)); border-radius: 12px; margin: 0 auto;"></div>
+                </div>
+                
+                <div class="tool-box">
+                    <label>CSS Code</label>
+                    <div class="output-box" id="cssOutput">-</div>
+                    <button class="btn btn-copy" onclick="copyCSS()">Copy CSS</button>
+                </div>
+                
+                <div id="ad-content" class="ad-container"></div>
+                
+                <section class="content-section">
+                    <h2>Related Tools</h2>
+                    <div class="related-tools" id="related-tools"></div>
+                </section>
+            </div>
+        </main>
+    </div>
+    
+    
+    {% include /ads/gobloggugel/default.html %}
+{% include footer.html %}
+
+    
+    <script>
+        function updateAnimation() {
+            const name = document.getElementById('animName').value;
+            const duration = document.getElementById('duration').value;
+            const timing = document.getElementById('timing').value;
+            const iterations = document.getElementById('iterations').value;
+            const type = document.getElementById('animType').value;
+            
+            document.getElementById('durationVal').textContent = duration;
+            
+            let keyframes = '';
+            
+            switch(type) {
+                case 'fade':
+                    keyframes = `@keyframes ${name} {\n  from { opacity: 0; }\n  to { opacity: 1; }\n}`;
+                    break;
+                case 'slide':
+                    keyframes = `@keyframes ${name} {\n  from { transform: translateX(-50px); }\n  to { transform: translateX(50px); }\n}`;
+                    break;
+                case 'bounce':
+                    keyframes = `@keyframes ${name} {\n  0%, 100% { transform: translateY(0); }\n  50% { transform: translateY(-30px); }\n}`;
+                    break;
+                case 'rotate':
+                    keyframes = `@keyframes ${name} {\n  from { transform: rotate(0deg); }\n  to { transform: rotate(360deg); }\n}`;
+                    break;
+                case 'pulse':
+                    keyframes = `@keyframes ${name} {\n  0%, 100% { transform: scale(1); }\n  50% { transform: scale(1.2); }\n}`;
+                    break;
+            }
+            
+            const css = `animation: ${name} ${duration}s ${timing} ${iterations};\n\n${keyframes}`;
+            
+            document.getElementById('cssOutput').textContent = css;
+            
+            const preview = document.getElementById('preview');
+            preview.style.animation = 'none';
+            
+            const style = document.createElement('style');
+            style.textContent = keyframes;
+            document.head.appendChild(style);
+            
+            void preview.offsetWidth;
+            preview.style.animation = `${name} ${duration}s ${timing} ${iterations}`;
+        }
+        
+        function copyCSS() {
+            const t = document.getElementById('cssOutput').textContent;
+            if (t === '-') { alert('Generate first.'); return; }
+            navigator.clipboard.writeText(t).then(() => alert('Copied!'));
+        }
+        
+        updateAnimation();
+    </script>
+</body>
+</html>

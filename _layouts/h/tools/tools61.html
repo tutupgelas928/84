@@ -1,0 +1,92 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sentiment Analyzer</title>
+    <meta name="description" content="Analyze text sentiment.">
+    <link rel="stylesheet" href="/site/tools/02/style.css">
+    <script src="/site/tools/02/config.js"></script>
+{% include head.html %}
+</head>
+<body data-page-name="Sentiment Analyzer" data-tool-id="sentiment">
+    <div id="site-header"></div>
+    
+    <div class="layout">
+        <div id="site-sidebar"></div>
+        
+        <main class="main-content">
+        <details><summary>...</summary>
+        {{content}}
+        </details>
+            <div id="breadcrumb"></div>
+            
+            <div class="tool-page">
+                <h1>Sentiment Analyzer</h1>
+                <p class="tool-intro">Analyze text sentiment (positive, negative, neutral).</p>
+                
+                <div class="tool-box">
+                    <label>Text</label>
+                    <textarea id="textInput" placeholder="Type or paste text here..." oninput="analyze()"></textarea>
+                </div>
+                
+                <div class="tool-box">
+                    <label>Result</label>
+                    <div class="stats">
+                        <div class="stat-card"><div class="stat-number" id="positiveCount">0</div><div class="stat-label">Positive</div></div>
+                        <div class="stat-card"><div class="stat-number" id="negativeCount">0</div><div class="stat-label">Negative</div></div>
+                        <div class="stat-card"><div class="stat-number" id="neutralCount">0</div><div class="stat-label">Neutral</div></div>
+                    </div>
+                    
+                    <label style="margin-top: 1rem;">Overall Sentiment</label>
+                    <div class="output-box" id="sentimentResult">-</div>
+                </div>
+                
+                <div id="ad-content" class="ad-container"></div>
+                
+                <section class="content-section">
+                    <h2>Related Tools</h2>
+                    <div class="related-tools" id="related-tools"></div>
+                </section>
+            </div>
+        </main>
+    </div>
+    
+    
+    {% include /ads/gobloggugel/default.html %}
+{% include footer.html %}
+
+    
+    <script>
+        const positiveWords = ['good', 'great', 'excellent', 'amazing', 'awesome', 'fantastic', 'wonderful', 'love', 'happy', 'best', 'perfect', 'nice', 'beautiful', 'enjoy', 'success'];
+        const negativeWords = ['bad', 'terrible', 'awful', 'horrible', 'worst', 'hate', 'sad', 'angry', 'poor', 'fail', 'failure', 'disappointed', 'frustrated', 'annoying', 'ugly'];
+        
+        function analyze() {
+            const text = document.getElementById('textInput').value.toLowerCase();
+            if (!text.trim()) return;
+            
+            const words = text.split(/\s+/);
+            let pos = 0, neg = 0, neu = 0;
+            
+            words.forEach(word => {
+                word = word.replace(/[^a-z]/g, '');
+                if (positiveWords.includes(word)) pos++;
+                else if (negativeWords.includes(word)) neg++;
+                else neu++;
+            });
+            
+            document.getElementById('positiveCount').textContent = pos;
+            document.getElementById('negativeCount').textContent = neg;
+            document.getElementById('neutralCount').textContent = neu;
+            
+            let result = '';
+            if (pos > neg) result = 'Positive';
+            else if (neg > pos) result = 'Negative';
+            else result = 'Neutral';
+            
+            document.getElementById('sentimentResult').textContent = `Overall: ${result} (${pos} positive, ${neg} negative)`;
+        }
+    </script>
+</body>
+</html>

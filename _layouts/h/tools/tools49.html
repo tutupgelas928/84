@@ -1,0 +1,94 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSON to CSV Converter</title>
+    <meta name="description" content="Convert JSON data to CSV format.">
+    <link rel="stylesheet" href="/site/tools/02/style.css">
+    <script src="/site/tools/02/config.js"></script>
+{% include head.html %}
+</head>
+<body data-page-name="JSON to CSV" data-tool-id="json-csv">
+    <div id="site-header"></div>
+    
+    <div class="layout">
+        <div id="site-sidebar"></div>
+        
+        <main class="main-content">
+        <details><summary>...</summary>
+        {{content}}
+        </details>
+            <div id="breadcrumb"></div>
+            
+            <div class="tool-page">
+                <h1>JSON to CSV Converter</h1>
+                <p class="tool-intro">Convert JSON array to CSV format.</p>
+                
+                <div class="tool-box">
+                    <label>JSON Input</label>
+                    <textarea id="jsonInput" placeholder='Paste JSON array here... e.g., [{"name":"John","age":30}]' style="font-family: monospace;"></textarea>
+                    
+                    <div style="margin-top: 0.8rem;">
+                        <button class="btn btn-primary" onclick="convert()">Convert</button>
+                        <button class="btn btn-copy" onclick="copyResult()">Copy</button>
+                        <button class="btn btn-secondary" onclick="sampleData()">Sample</button>
+                    </div>
+                </div>
+                
+                <div class="tool-box">
+                    <label>CSV Output</label>
+                    <div class="output-box" id="csvOutput">-</div>
+                </div>
+                
+                <div id="ad-content" class="ad-container"></div>
+                
+                <section class="content-section">
+                    <h2>Related Tools</h2>
+                    <div class="related-tools" id="related-tools"></div>
+                </section>
+            </div>
+        </main>
+    </div>
+    
+    
+    {% include /ads/gobloggugel/default.html %}
+{% include footer.html %}
+
+    
+    <script>
+        function convert() {
+            const json = document.getElementById('jsonInput').value.trim();
+            if (!json) { alert('Paste JSON first.'); return; }
+            
+            try {
+                const data = JSON.parse(json);
+                if (!Array.isArray(data) || data.length === 0) {
+                    alert('JSON must be a non-empty array.');
+                    return;
+                }
+                
+                const headers = Object.keys(data[0]);
+                const rows = data.map(item => headers.map(h => item[h] ?? '').join(','));
+                const csv = [headers.join(','), ...rows].join('\n');
+                
+                document.getElementById('csvOutput').textContent = csv;
+            } catch(e) {
+                alert('Invalid JSON: ' + e.message);
+            }
+        }
+        
+        function copyResult() {
+            const t = document.getElementById('csvOutput').textContent;
+            if (t === '-') { alert('Convert first.'); return; }
+            navigator.clipboard.writeText(t).then(() => alert('Copied!'));
+        }
+        
+        function sampleData() {
+            document.getElementById('jsonInput').value = '[{"name":"John","email":"john@example.com","age":30},{"name":"Jane","email":"jane@example.com","age":25}]';
+            convert();
+        }
+    </script>
+</body>
+</html>

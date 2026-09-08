@@ -1,0 +1,91 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aspect Ratio Calculator</title>
+    <meta name="description" content="Calculate aspect ratios for screens and images.">
+    <link rel="stylesheet" href="/site/tools/02/style.css">
+    <script src="/site/tools/02/config.js"></script>
+{% include head.html %}
+</head>
+<body data-page-name="Aspect Ratio Calculator" data-tool-id="aspect-ratio">
+    <div id="site-header"></div>
+    
+    <div class="layout">
+        <div id="site-sidebar"></div>
+        
+        <main class="main-content">
+        <details><summary>...</summary>
+        {{content}}
+        </details>
+            <div id="breadcrumb"></div>
+            
+            <div class="tool-page">
+                <h1>Aspect Ratio Calculator</h1>
+                <p class="tool-intro">Calculate aspect ratios.</p>
+                
+                <div class="tool-box">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div>
+                            <label>Width</label>
+                            <input type="number" id="width" value="1920" oninput="calculate()">
+                        </div>
+                        <div>
+                            <label>Height</label>
+                            <input type="number" id="height" value="1080" oninput="calculate()">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tool-box">
+                    <label>Result</label>
+                    <div class="output-box" id="ratioResult">-</div>
+                    <div class="stats" style="margin-top: 1rem;">
+                        <div class="stat-card"><div class="stat-number" id="gcd">-</div><div class="stat-label">GCD</div></div>
+                        <div class="stat-card"><div class="stat-number" id="ratioWidth">-</div><div class="stat-label">Ratio W</div></div>
+                        <div class="stat-card"><div class="stat-number" id="ratioHeight">-</div><div class="stat-label">Ratio H</div></div>
+                    </div>
+                </div>
+                
+                <div id="ad-content" class="ad-container"></div>
+                
+                <section class="content-section">
+                    <h2>Related Tools</h2>
+                    <div class="related-tools" id="related-tools"></div>
+                </section>
+            </div>
+        </main>
+    </div>
+    
+    
+    {% include /ads/gobloggugel/default.html %}
+{% include footer.html %}
+
+    
+    <script>
+        function gcd(a, b) {
+            return b === 0 ? a : gcd(b, a % b);
+        }
+        
+        function calculate() {
+            const w = parseInt(document.getElementById('width').value) || 0;
+            const h = parseInt(document.getElementById('height').value) || 0;
+            
+            if (w === 0 || h === 0) return;
+            
+            const g = gcd(w, h);
+            const rw = w / g;
+            const rh = h / g;
+            
+            document.getElementById('gcd').textContent = g;
+            document.getElementById('ratioWidth').textContent = rw;
+            document.getElementById('ratioHeight').textContent = rh;
+            document.getElementById('ratioResult').textContent = `Aspect Ratio: ${rw}:${rh}`;
+        }
+        
+        calculate();
+    </script>
+</body>
+</html>

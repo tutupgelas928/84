@@ -1,0 +1,102 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Readability Analyzer</title>
+    <meta name="description" content="Analyze text readability with multiple formulas.">
+    <link rel="stylesheet" href="/site/tools/02/style.css">
+    <script src="/site/tools/02/config.js"></script>
+{% include head.html %}
+</head>
+<body data-page-name="Readability Analyzer" data-tool-id="readability">
+    <div id="site-header"></div>
+    
+    <div class="layout">
+        <div id="site-sidebar"></div>
+        
+        <main class="main-content">
+        <details><summary>...</summary>
+        {{content}}
+        </details>
+            <div id="breadcrumb"></div>
+            
+            <div class="tool-page">
+                <h1>Readability Analyzer</h1>
+                <p class="tool-intro">Analyze text readability with multiple formulas.</p>
+                
+                <div class="tool-box">
+                    <label>Text</label>
+                    <textarea id="textInput" placeholder="Paste your text here..." oninput="analyze()"></textarea>
+                </div>
+                
+                <div class="tool-box">
+                    <label>Results</label>
+                    <div class="stats">
+                        <div class="stat-card"><div class="stat-number" id="wordCount">0</div><div class="stat-label">Words</div></div>
+                        <div class="stat-card"><div class="stat-number" id="sentCount">0</div><div class="stat-label">Sentences</div></div>
+                        <div class="stat-card"><div class="stat-number" id="syllableCount">0</div><div class="stat-label">Syllables</div></div>
+                        <div class="stat-card"><div class="stat-number" id="fleschScore">0</div><div class="stat-label">Flesch</div></div>
+                    </div>
+                    
+                    <label style="margin-top: 1rem;">Readability Level</label>
+                    <div class="output-box" id="readabilityLevel">-</div>
+                </div>
+                
+                <div id="ad-content" class="ad-container"></div>
+                
+                <section class="content-section">
+                    <h2>Related Tools</h2>
+                    <div class="related-tools" id="related-tools"></div>
+                </section>
+            </div>
+        </main>
+    </div>
+    
+    
+    {% include /ads/gobloggugel/default.html %}
+{% include footer.html %}
+
+    
+    <script>
+        function countSyllables(word) {
+            word = word.toLowerCase();
+            if (word.length <= 3) return 1;
+            word = word.replace(/(?:[^laeiouy]es|ed|[^laeiouy]e)$/, '');
+            word = word.replace(/^y/, '');
+            const match = word.match(/[aeiouy]{1,2}/g);
+            return match ? match.length : 1;
+        }
+        
+        function analyze() {
+            const text = document.getElementById('textInput').value.trim();
+            if (!text) return;
+            
+            const words = text.split(/\s+/);
+            const sentences = text.split(/[.!?]+/).filter(s => s.trim());
+            
+            let syllables = 0;
+            words.forEach(w => syllables += countSyllables(w));
+            
+            const flesch = 206.835 - 1.015 * (words.length / sentences.length) - 84.6 * (syllables / words.length);
+            
+            document.getElementById('wordCount').textContent = words.length;
+            document.getElementById('sentCount').textContent = sentences.length;
+            document.getElementById('syllableCount').textContent = syllables;
+            document.getElementById('fleschScore').textContent = Math.round(flesch);
+            
+            let level = '';
+            if (flesch >= 90) level = 'Very Easy (5th grade)';
+            else if (flesch >= 80) level = 'Easy (6th grade)';
+            else if (flesch >= 70) level = 'Fairly Easy (7th grade)';
+            else if (flesch >= 60) level = 'Standard (8th-9th grade)';
+            else if (flesch >= 50) level = 'Fairly Difficult (10th-12th grade)';
+            else if (flesch >= 30) level = 'Difficult (College)';
+            else level = 'Very Difficult (College graduate)';
+            
+            document.getElementById('readabilityLevel').textContent = level;
+        }
+    </script>
+</body>
+</html>

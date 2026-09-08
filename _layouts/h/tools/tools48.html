@@ -1,0 +1,86 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JS Minifier</title>
+    <meta name="description" content="Minify JavaScript code.">
+    <link rel="stylesheet" href="/site/tools/02/style.css">
+    <script src="/site/tools/02/config.js"></script>
+{% include head.html %}
+</head>
+<body data-page-name="JS Minifier" data-tool-id="js-minifier">
+    <div id="site-header"></div>
+    
+    <div class="layout">
+        <div id="site-sidebar"></div>
+        
+        <main class="main-content">
+        <details><summary>...</summary>
+        {{content}}
+        </details>
+            <div id="breadcrumb"></div>
+            
+            <div class="tool-page">
+                <h1>JS Minifier</h1>
+                <p class="tool-intro">Minify JavaScript code by removing whitespace and comments.</p>
+                
+                <div class="tool-box">
+                    <label>JavaScript Code</label>
+                    <textarea id="jsInput" placeholder="Paste JavaScript here..." style="font-family: monospace;"></textarea>
+                    
+                    <div style="margin-top: 0.8rem;">
+                        <button class="btn btn-primary" onclick="minify()">Minify</button>
+                        <button class="btn btn-copy" onclick="copyResult()">Copy</button>
+                        <button class="btn btn-secondary" onclick="clearAll()">Clear</button>
+                    </div>
+                </div>
+                
+                <div class="tool-box">
+                    <label>Minified</label>
+                    <div class="output-box" id="jsOutput">-</div>
+                </div>
+                
+                <div id="ad-content" class="ad-container"></div>
+                
+                <section class="content-section">
+                    <h2>Related Tools</h2>
+                    <div class="related-tools" id="related-tools"></div>
+                </section>
+            </div>
+        </main>
+    </div>
+    
+    
+    {% include /ads/gobloggugel/default.html %}
+{% include footer.html %}
+
+    
+    <script>
+        function minify() {
+            let js = document.getElementById('jsInput').value;
+            if (!js.trim()) { alert('Paste JS first.'); return; }
+            
+            js = js.replace(/\/\*[\s\S]*?\*\//g, '');
+            js = js.replace(/\/\/.*$/gm, '');
+            js = js.replace(/\s+/g, ' ');
+            js = js.replace(/\s*([{};:,=+\-*/<>])\s*/g, '$1');
+            js = js.trim();
+            
+            document.getElementById('jsOutput').textContent = js;
+        }
+        
+        function copyResult() {
+            const t = document.getElementById('jsOutput').textContent;
+            if (t === '-') { alert('Minify first.'); return; }
+            navigator.clipboard.writeText(t).then(() => alert('Copied!'));
+        }
+        
+        function clearAll() {
+            document.getElementById('jsInput').value = '';
+            document.getElementById('jsOutput').textContent = '-';
+        }
+    </script>
+</body>
+</html>
