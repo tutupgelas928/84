@@ -1,0 +1,117 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Summarizer</title>
+    <meta name="description" content="Extractive text summarization tool.">
+    <link rel="stylesheet" href="/site/tools/02/style.css">
+    <script src="/site/tools/02/config.js"></script>
+{% include head.html %}
+</head>
+<body data-page-name="Text Summarizer" data-tool-id="summarizer">
+    <div id="site-header"></div>
+    
+    <div class="layout">
+        <div id="site-sidebar"></div>
+        
+        <main class="main-content">
+        <details><summary>...</summary>
+        {{content}}
+        </details>
+            <div id="breadcrumb"></div>
+            
+            <div class="tool-page">
+                <h1>Text Summarizer</h1>
+                <p class="tool-intro">Extractive text summarization.</p>
+                
+                <div class="tool-box">
+                    <label>Text to Summarize</label>
+                    <textarea id="textInput" placeholder="Paste your text here..."></textarea>
+                    
+                    <label style="margin-top: 0.8rem;">Number of Sentences</label>
+                    <input type="number" id="sentenceCount" value="3" min="1" max="10">
+                    
+                    <div style="margin-top: 0.8rem;">
+                        <button class="btn btn-primary" onclick="summarize()">Summarize</button>
+                        <button class="btn btn-copy" onclick="copyResult()">Copy</button>
+                        <button class="btn btn-secondary" onclick="clearAll()">Clear</button>
+                    </div>
+                </div>
+                
+                <div class="tool-box">
+                    <label>Summary</label>
+                    <div class="output-box" id="summaryOutput">-</div>
+                </div>
+                
+                <div id="ad-content" class="ad-container"></div>
+                
+                <section class="content-section">
+                    <h2>Related Tools</h2>
+                    <div class="related-tools" id="related-tools"></div>
+                </section>
+            </div>
+        </main>
+    </div>
+    
+    
+    {% include /ads/gobloggugel/default.html %}
+{% include footer.html %}
+
+    
+    <script>
+        function summarize() {
+            const text = document.getElementById('textInput').value.trim();
+            const numSentences = parseInt(document.getElementById('sentenceCount').value) || 3;
+            
+            if (!text) { alert('Paste text first.'); return; }
+            
+            const sentences = text.split(/[.!?]+/).filter(s => s.trim());
+            
+            if (sentences.length <= numSentences) {
+                document.getElementById('summaryOutput').textContent = sentences.join('. ');
+                return;
+            }
+            
+            // Frequency-based scoring
+            const wordFreq = {};
+            sentences.forEach(sentence => {
+                const words = sentence.toLowerCase().split(/\s+/);
+                words.forEach(word => {
+                    word = word.replace(/[^a-z]/g, '');
+                    if (word.length > 3) {
+                        wordFreq[word] = (wordFreq[word] || 0) + 1;
+                    }
+                });
+            });
+            
+            const scored = sentences.map((sentence, index) => {
+                const words = sentence.toLowerCase().split(/\s+/);
+                let score = 0;
+                words.forEach(word => {
+                    word = word.replace(/[^a-z]/g, '');
+                    if (wordFreq[word]) score += wordFreq[word];
+                });
+                return { sentence, score, index };
+            });
+            
+            scored.sort((a, b) => b.score - a.score);
+            const top = scored.slice(0, numSentences).sort((a, b) => a.index - b.index);
+            
+            document.getElementById('summaryOutput').textContent = top.map(t => t.sentence.trim()).join('. ');
+        }
+        
+        function copyResult() {
+            const t = document.getElementById('summaryOutput').textContent;
+            if (t === '-') { alert('Summarize first.'); return; }
+            navigator.clipboard.writeText(t).then(() => alert('Copied!'));
+        }
+        
+        function clearAll() {
+            document.getElementById('textInput').value = '';
+            document.getElementById('summaryOutput').textContent = '-';
+        }
+    </script>
+</body>
+</html>

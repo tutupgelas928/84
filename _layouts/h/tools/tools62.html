@@ -1,0 +1,112 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SEO Meta Generator</title>
+    <meta name="description" content="Generate complete SEO meta tags.">
+    <link rel="stylesheet" href="/site/tools/02/style.css">
+    <script src="/site/tools/02/config.js"></script>
+{% include head.html %}
+</head>
+<body data-page-name="SEO Meta Generator" data-tool-id="seo-meta">
+    <div id="site-header"></div>
+    
+    <div class="layout">
+        <div id="site-sidebar"></div>
+        
+        <main class="main-content">
+        <details><summary>...</summary>
+        {{content}}
+        </details>
+            <div id="breadcrumb"></div>
+            
+            <div class="tool-page">
+                <h1>SEO Meta Generator</h1>
+                <p class="tool-intro">Generate complete SEO meta tags for your webpage.</p>
+                
+                <div class="tool-box">
+                    <label>Page Title</label>
+                    <input type="text" id="pageTitle" placeholder="My Awesome Page" oninput="generateMeta()">
+                    
+                    <label style="margin-top: 0.8rem;">Description</label>
+                    <textarea id="pageDesc" placeholder="Describe your page..." oninput="generateMeta()" style="min-height: 80px;"></textarea>
+                    
+                    <label style="margin-top: 0.8rem;">Keywords (comma separated)</label>
+                    <input type="text" id="pageKeywords" placeholder="keyword1, keyword2, keyword3" oninput="generateMeta()">
+                    
+                    <label style="margin-top: 0.8rem;">Author</label>
+                    <input type="text" id="pageAuthor" placeholder="Author name" oninput="generateMeta()">
+                    
+                    <label style="margin-top: 0.8rem;">OG Image URL</label>
+                    <input type="text" id="ogImage" placeholder="https://example.com/image.jpg" oninput="generateMeta()">
+                </div>
+                
+                <div class="tool-box">
+                    <label>Generated Meta Tags</label>
+                    <div class="output-box" id="metaOutput">-</div>
+                    <button class="btn btn-copy" onclick="copyMeta()">Copy</button>
+                </div>
+                
+                <div class="tool-box">
+                    <label>SERP Preview</label>
+                    <div style="background: white; border-radius: 8px; padding: 1rem;">
+                        <div id="serpTitle" style="color: #1a0dab; font-size: 1.1rem; font-weight: 600;"></div>
+                        <div id="serpUrl" style="color: #006621; font-size: 0.85rem;"></div>
+                        <div id="serpDesc" style="color: #545454; font-size: 0.9rem;"></div>
+                    </div>
+                </div>
+                
+                <div id="ad-content" class="ad-container"></div>
+                
+                <section class="content-section">
+                    <h2>Related Tools</h2>
+                    <div class="related-tools" id="related-tools"></div>
+                </section>
+            </div>
+        </main>
+    </div>
+    
+    
+    {% include /ads/gobloggugel/default.html %}
+{% include footer.html %}
+
+    
+    <script>
+        function generateMeta() {
+            const title = document.getElementById('pageTitle').value;
+            const desc = document.getElementById('pageDesc').value;
+            const keywords = document.getElementById('pageKeywords').value;
+            const author = document.getElementById('pageAuthor').value;
+            const ogImage = document.getElementById('ogImage').value;
+            
+            let meta = '';
+            if (title) meta += `<title>${title}</title>\n`;
+            if (desc) meta += `<meta name="description" content="${desc}">\n`;
+            if (keywords) meta += `<meta name="keywords" content="${keywords}">\n`;
+            if (author) meta += `<meta name="author" content="${author}">\n`;
+            meta += '<meta name="robots" content="index, follow">\n';
+            if (title) meta += `<meta property="og:title" content="${title}">\n`;
+            if (desc) meta += `<meta property="og:description" content="${desc}">\n`;
+            if (ogImage) meta += `<meta property="og:image" content="${ogImage}">\n`;
+            meta += '<meta property="og:type" content="website">\n';
+            meta += '<meta name="twitter:card" content="summary_large_image">\n';
+            if (title) meta += `<meta name="twitter:title" content="${title}">\n`;
+            if (desc) meta += `<meta name="twitter:description" content="${desc}">`;
+            
+            document.getElementById('metaOutput').textContent = meta;
+            
+            document.getElementById('serpTitle').textContent = title || 'Page Title';
+            document.getElementById('serpUrl').textContent = window.location.hostname + '/page-url';
+            document.getElementById('serpDesc').textContent = desc || 'Page description will appear here...';
+        }
+        
+        function copyMeta() {
+            const t = document.getElementById('metaOutput').textContent;
+            if (t === '-') { alert('Generate first.'); return; }
+            navigator.clipboard.writeText(t).then(() => alert('Copied!'));
+        }
+    </script>
+</body>
+</html>

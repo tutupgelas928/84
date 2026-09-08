@@ -1,0 +1,97 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SQL Formatter</title>
+    <meta name="description" content="Format SQL queries with proper indentation.">
+    <link rel="stylesheet" href="/site/tools/02/style.css">
+    <script src="/site/tools/02/config.js"></script>
+{% include head.html %}
+</head>
+<body data-page-name="SQL Formatter" data-tool-id="sql-formatter">
+    <div id="site-header"></div>
+    
+    <div class="layout">
+        <div id="site-sidebar"></div>
+        
+        <main class="main-content">
+        <details><summary>...</summary>
+        {{content}}
+        </details>
+            <div id="breadcrumb"></div>
+            
+            <div class="tool-page">
+                <h1>SQL Formatter</h1>
+                <p class="tool-intro">Format SQL queries with proper indentation.</p>
+                
+                <div class="tool-box">
+                    <label>SQL Query</label>
+                    <textarea id="sqlInput" placeholder="Paste SQL query here..." style="font-family: monospace;"></textarea>
+                    
+                    <div style="margin-top: 0.8rem;">
+                        <button class="btn btn-primary" onclick="formatSQL()">Format</button>
+                        <button class="btn btn-copy" onclick="copySQL()">Copy</button>
+                        <button class="btn btn-secondary" onclick="clearSQL()">Clear</button>
+                        <button class="btn btn-secondary" onclick="sampleSQL()">Sample</button>
+                    </div>
+                </div>
+                
+                <div class="tool-box">
+                    <label>Formatted</label>
+                    <div class="output-box" id="sqlOutput">-</div>
+                </div>
+                
+                <div id="ad-content" class="ad-container"></div>
+                
+                <section class="content-section">
+                    <h2>Related Tools</h2>
+                    <div class="related-tools" id="related-tools"></div>
+                </section>
+            </div>
+        </main>
+    </div>
+    
+    
+    {% include /ads/gobloggugel/default.html %}
+{% include footer.html %}
+
+    
+    <script>
+        function formatSQL() {
+            const sql = document.getElementById('sqlInput').value;
+            if (!sql.trim()) { alert('Paste SQL first.'); return; }
+            
+            const keywords = ['SELECT', 'FROM', 'WHERE', 'JOIN', 'LEFT JOIN', 'RIGHT JOIN', 'INNER JOIN', 'GROUP BY', 'ORDER BY', 'HAVING', 'LIMIT', 'INSERT INTO', 'VALUES', 'UPDATE', 'SET', 'DELETE FROM', 'AND', 'OR'];
+            
+            let formatted = sql.replace(/\s+/g, ' ').trim();
+            
+            keywords.forEach(kw => {
+                const regex = new RegExp(`\\b${kw}\\b`, 'gi');
+                formatted = formatted.replace(regex, `\n${kw.toUpperCase()}`);
+            });
+            
+            formatted = formatted.replace(/\n+/g, '\n').trim();
+            
+            document.getElementById('sqlOutput').textContent = formatted;
+        }
+        
+        function copySQL() {
+            const t = document.getElementById('sqlOutput').textContent;
+            if (t === '-') { alert('Format first.'); return; }
+            navigator.clipboard.writeText(t).then(() => alert('Copied!'));
+        }
+        
+        function clearSQL() {
+            document.getElementById('sqlInput').value = '';
+            document.getElementById('sqlOutput').textContent = '-';
+        }
+        
+        function sampleSQL() {
+            document.getElementById('sqlInput').value = 'SELECT id, name, email FROM users WHERE age > 18 AND status = "active" ORDER BY created_at DESC LIMIT 10';
+            formatSQL();
+        }
+    </script>
+</body>
+</html>
