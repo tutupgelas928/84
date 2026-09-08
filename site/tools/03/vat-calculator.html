@@ -1,0 +1,106 @@
+---
+layout: null
+permalink: /site/tools/03/tax/vat-calculator.html
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VAT Calculator</title>
+    <meta name="description" content="Add or extract VAT from any amount.">
+    <link rel="stylesheet" href="/site/tools/03/style.css">
+    <script src="/site/tools/03/config.js"></script>
+    {% include head.html %}
+</head>
+<body data-page-name="VAT Calculator" data-category="tax" data-tool-id="vat-calculator">
+    <details>
+        <summary>___</summary>
+        {{content}}
+    </details>
+    
+    <div id="site-header"></div>
+    
+    <main class="main-content">
+        <div id="breadcrumb"></div>
+        
+        <div class="tool-page">
+            <h1>VAT Calculator</h1>
+            <p class="tool-intro" id="toolIntro"></p>
+            
+            <div class="tool-box">
+                <div class="form-grid">
+                    <div>
+                        <label>Amount</label>
+                        <input type="number" id="amount" value="100" min="0" step="0.01">
+                    </div>
+                    <div>
+                        <label>VAT Rate (%)</label>
+                        <input type="number" id="vatRate" value="11" min="0" step="0.01">
+                    </div>
+                    <div>
+                        <label>Operation</label>
+                        <select id="operation" onchange="toggleLabels()">
+                            <option value="add">Add VAT (Net → Gross)</option>
+                            <option value="extract">Extract VAT (Gross → Net)</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 1rem;">
+                    <button class="btn btn-primary" onclick="calculate()">Calculate</button>
+                </div>
+            </div>
+            
+            <div class="tool-box">
+                <label>Results</label>
+                <div class="stats">
+                    <div class="stat-card"><div class="stat-number" id="vatAmount">-</div><div class="stat-label">VAT Amount</div></div>
+                    <div class="stat-card"><div class="stat-number" id="netAmount">-</div><div class="stat-label">Net Amount</div></div>
+                    <div class="stat-card"><div class="stat-number" id="grossAmount">-</div><div class="stat-label">Gross Amount</div></div>
+                </div>
+            </div>
+            
+            <div id="ad-content" class="ad-container"></div>
+            
+            <section class="content-section" id="toolExplanation"></section>
+            <section class="content-section" id="toolTips"></section>
+            <section class="content-section" id="toolFAQ"></section>
+            
+            <section class="content-section">
+                <h2>Related Tools</h2>
+                <div class="related-tools" id="related-tools"></div>
+            </section>
+        </div>
+    </main>
+    
+    {% include /ads/gobloggugel/default.html %}
+    {% include footer.html %}
+    
+    <script>
+        function calculate() {
+            const amount = parseFloat(document.getElementById('amount').value) || 0;
+            const rate = parseFloat(document.getElementById('vatRate').value) || 0;
+            const operation = document.getElementById('operation').value;
+            
+            let vat, net, gross;
+            
+            if (operation === 'add') {
+                net = amount;
+                vat = net * (rate / 100);
+                gross = net + vat;
+            } else {
+                gross = amount;
+                net = gross / (1 + rate / 100);
+                vat = gross - net;
+            }
+            
+            document.getElementById('vatAmount').textContent = vat.toFixed(2);
+            document.getElementById('netAmount').textContent = net.toFixed(2);
+            document.getElementById('grossAmount').textContent = gross.toFixed(2);
+        }
+        
+        calculate();
+    </script>
+</body>
+</html>

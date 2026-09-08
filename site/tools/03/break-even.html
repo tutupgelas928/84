@@ -1,0 +1,93 @@
+---
+layout: null
+permalink: /site/tools/03/utility/break-even.html
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Break-even Calculator</title>
+    <meta name="description" content="Calculate business break-even point.">
+    <link rel="stylesheet" href="/site/tools/03/style.css">
+    <script src="/site/tools/03/config.js"></script>
+    {% include head.html %}
+</head>
+<body data-page-name="Break-even Calculator" data-category="utility" data-tool-id="break-even">
+    <details>
+        <summary>___</summary>
+        {{content}}
+    </details>
+    
+    <div id="site-header"></div>
+    
+    <main class="main-content">
+        <div id="breadcrumb"></div>
+        
+        <div class="tool-page">
+            <h1>Break-even Calculator</h1>
+            <p class="tool-intro" id="toolIntro"></p>
+            
+            <div class="tool-box">
+                <div class="form-grid">
+                    <div>
+                        <label>Fixed Costs</label>
+                        <input type="number" id="fixedCosts" value="10000" min="0" step="0.01">
+                    </div>
+                    <div>
+                        <label>Selling Price per Unit</label>
+                        <input type="number" id="sellingPrice" value="50" min="0" step="0.01">
+                    </div>
+                    <div>
+                        <label>Variable Cost per Unit</label>
+                        <input type="number" id="variableCost" value="30" min="0" step="0.01">
+                    </div>
+                </div>
+                
+                <div style="margin-top: 1rem;">
+                    <button class="btn btn-primary" onclick="calculate()">Calculate</button>
+                </div>
+            </div>
+            
+            <div class="tool-box">
+                <label>Results</label>
+                <div class="stats">
+                    <div class="stat-card"><div class="stat-number" id="breakEvenUnits">-</div><div class="stat-label">Units to Break-even</div></div>
+                    <div class="stat-card"><div class="stat-number" id="breakEvenRevenue">-</div><div class="stat-label">Revenue to Break-even</div></div>
+                </div>
+            </div>
+            
+            <div id="ad-content" class="ad-container"></div>
+            
+            <section class="content-section" id="toolExplanation"></section>
+            <section class="content-section" id="toolTips"></section>
+            <section class="content-section" id="toolFAQ"></section>
+            
+            <section class="content-section">
+                <h2>Related Tools</h2>
+                <div class="related-tools" id="related-tools"></div>
+            </section>
+        </div>
+    </main>
+    
+    {% include /ads/gobloggugel/default.html %}
+    {% include footer.html %}
+    
+    <script>
+        function calculate() {
+            const fixed = parseFloat(document.getElementById('fixedCosts').value) || 0;
+            const price = parseFloat(document.getElementById('sellingPrice').value) || 0;
+            const variable = parseFloat(document.getElementById('variableCost').value) || 0;
+            
+            const contributionMargin = price - variable;
+            const breakEvenUnits = contributionMargin > 0 ? Math.ceil(fixed / contributionMargin) : 0;
+            const breakEvenRevenue = breakEvenUnits * price;
+            
+            document.getElementById('breakEvenUnits').textContent = breakEvenUnits;
+            document.getElementById('breakEvenRevenue').textContent = breakEvenRevenue.toFixed(2);
+        }
+        
+        calculate();
+    </script>
+</body>
+</html>

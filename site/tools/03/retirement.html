@@ -1,0 +1,115 @@
+---
+layout: null
+permalink: /site/tools/03/investment/retirement.html
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Retirement Calculator</title>
+    <meta name="description" content="Plan your retirement savings.">
+    <link rel="stylesheet" href="/site/tools/03/style.css">
+    <script src="/site/tools/03/config.js"></script>
+    {% include head.html %}
+</head>
+<body data-page-name="Retirement Calculator" data-category="investment" data-tool-id="retirement">
+    <details>
+        <summary>___</summary>
+        {{content}}
+    </details>
+    
+    <div id="site-header"></div>
+    
+    <main class="main-content">
+        <div id="breadcrumb"></div>
+        
+        <div class="tool-page">
+            <h1>Retirement Calculator</h1>
+            <p class="tool-intro" id="toolIntro"></p>
+            
+            <div class="tool-box">
+                <div class="form-grid">
+                    <div>
+                        <label>Current Age</label>
+                        <input type="number" id="currentAge" value="30" min="1">
+                    </div>
+                    <div>
+                        <label>Retirement Age</label>
+                        <input type="number" id="retireAge" value="65" min="1">
+                    </div>
+                    <div>
+                        <label>Current Savings</label>
+                        <input type="number" id="currentSavings" value="10000" min="0">
+                    </div>
+                    <div>
+                        <label>Monthly Contribution</label>
+                        <input type="number" id="monthlyContribution" value="500" min="0">
+                    </div>
+                    <div>
+                        <label>Expected Annual Return (%)</label>
+                        <input type="number" id="annualRate" value="7" min="0" step="0.01">
+                    </div>
+                </div>
+                
+                <div style="margin-top: 1rem;">
+                    <button class="btn btn-primary" onclick="calculate()">Calculate</button>
+                </div>
+            </div>
+            
+            <div class="tool-box">
+                <label>Results</label>
+                <div class="stats">
+                    <div class="stat-card"><div class="stat-number" id="yearsToRetire">-</div><div class="stat-label">Years</div></div>
+                    <div class="stat-card"><div class="stat-number" id="retirementFund">-</div><div class="stat-label">Retirement Fund</div></div>
+                    <div class="stat-card"><div class="stat-number" id="totalContributed">-</div><div class="stat-label">Contributed</div></div>
+                </div>
+            </div>
+            
+            <div id="ad-content" class="ad-container"></div>
+            
+            <section class="content-section" id="toolExplanation"></section>
+            <section class="content-section" id="toolTips"></section>
+            <section class="content-section" id="toolFAQ"></section>
+            
+            <section class="content-section">
+                <h2>Related Tools</h2>
+                <div class="related-tools" id="related-tools"></div>
+            </section>
+        </div>
+    </main>
+    
+    {% include /ads/gobloggugel/default.html %}
+    {% include footer.html %}
+    
+    <script>
+        function calculate() {
+            const currentAge = parseInt(document.getElementById('currentAge').value) || 0;
+            const retireAge = parseInt(document.getElementById('retireAge').value) || 0;
+            const current = parseFloat(document.getElementById('currentSavings').value) || 0;
+            const monthly = parseFloat(document.getElementById('monthlyContribution').value) || 0;
+            const annualRate = parseFloat(document.getElementById('annualRate').value) || 0;
+            
+            const years = retireAge - currentAge;
+            const monthlyRate = annualRate / 100 / 12;
+            const months = years * 12;
+            
+            let futureValue = current * Math.pow(1 + monthlyRate, months);
+            
+            if (monthlyRate === 0) {
+                futureValue += monthly * months;
+            } else {
+                futureValue += monthly * (Math.pow(1 + monthlyRate, months) - 1) / monthlyRate;
+            }
+            
+            const totalContributed = current + monthly * months;
+            
+            document.getElementById('yearsToRetire').textContent = years;
+            document.getElementById('retirementFund').textContent = futureValue.toFixed(2);
+            document.getElementById('totalContributed').textContent = totalContributed.toFixed(2);
+        }
+        
+        calculate();
+    </script>
+</body>
+</html>

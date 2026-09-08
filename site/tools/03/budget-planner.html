@@ -1,0 +1,122 @@
+---
+layout: null
+permalink: /site/tools/03/utility/budget-planner.html
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Budget Planner</title>
+    <meta name="description" content="Plan your monthly budget.">
+    <link rel="stylesheet" href="/site/tools/03/style.css">
+    <script src="/site/tools/03/config.js"></script>
+    {% include head.html %}
+</head>
+<body data-page-name="Budget Planner" data-category="utility" data-tool-id="budget-planner">
+    <details>
+        <summary>___</summary>
+        {{content}}
+    </details>
+    
+    <div id="site-header"></div>
+    
+    <main class="main-content">
+        <div id="breadcrumb"></div>
+        
+        <div class="tool-page">
+            <h1>Budget Planner</h1>
+            <p class="tool-intro" id="toolIntro"></p>
+            
+            <div class="tool-box">
+                <div class="form-grid">
+                    <div>
+                        <label>Monthly Income</label>
+                        <input type="number" id="monthlyIncome" value="5000" min="0" step="0.01">
+                    </div>
+                    <div>
+                        <label>Housing</label>
+                        <input type="number" id="housing" value="1500" min="0" step="0.01">
+                    </div>
+                    <div>
+                        <label>Food</label>
+                        <input type="number" id="food" value="500" min="0" step="0.01">
+                    </div>
+                    <div>
+                        <label>Transportation</label>
+                        <input type="number" id="transport" value="300" min="0" step="0.01">
+                    </div>
+                    <div>
+                        <label>Utilities</label>
+                        <input type="number" id="utilities" value="200" min="0" step="0.01">
+                    </div>
+                    <div>
+                        <label>Entertainment</label>
+                        <input type="number" id="entertainment" value="200" min="0" step="0.01">
+                    </div>
+                    <div>
+                        <label>Savings</label>
+                        <input type="number" id="savings" value="500" min="0" step="0.01">
+                    </div>
+                    <div>
+                        <label>Other</label>
+                        <input type="number" id="other" value="300" min="0" step="0.01">
+                    </div>
+                </div>
+                
+                <div style="margin-top: 1rem;">
+                    <button class="btn btn-primary" onclick="calculate()">Calculate</button>
+                </div>
+            </div>
+            
+            <div class="tool-box">
+                <label>Results</label>
+                <div class="stats">
+                    <div class="stat-card"><div class="stat-number" id="totalExpenses">-</div><div class="stat-label">Total Expenses</div></div>
+                    <div class="stat-card"><div class="stat-number" id="remaining">-</div><div class="stat-label">Remaining</div></div>
+                    <div class="stat-card"><div class="stat-number" id="savingsRate">-</div><div class="stat-label">Savings Rate</div></div>
+                </div>
+            </div>
+            
+            <div id="ad-content" class="ad-container"></div>
+            
+            <section class="content-section" id="toolExplanation"></section>
+            <section class="content-section" id="toolTips"></section>
+            <section class="content-section" id="toolFAQ"></section>
+            
+            <section class="content-section">
+                <h2>Related Tools</h2>
+                <div class="related-tools" id="related-tools"></div>
+            </section>
+        </div>
+    </main>
+    
+    {% include /ads/gobloggugel/default.html %}
+    {% include footer.html %}
+    
+    <script>
+        function calculate() {
+            const income = parseFloat(document.getElementById('monthlyIncome').value) || 0;
+            const expenses = [
+                parseFloat(document.getElementById('housing').value) || 0,
+                parseFloat(document.getElementById('food').value) || 0,
+                parseFloat(document.getElementById('transport').value) || 0,
+                parseFloat(document.getElementById('utilities').value) || 0,
+                parseFloat(document.getElementById('entertainment').value) || 0,
+                parseFloat(document.getElementById('savings').value) || 0,
+                parseFloat(document.getElementById('other').value) || 0
+            ];
+            
+            const totalExpenses = expenses.reduce((a, b) => a + b, 0);
+            const remaining = income - totalExpenses;
+            const savingsRate = income > 0 ? (expenses[5] / income) * 100 : 0;
+            
+            document.getElementById('totalExpenses').textContent = totalExpenses.toFixed(2);
+            document.getElementById('remaining').textContent = remaining.toFixed(2);
+            document.getElementById('savingsRate').textContent = savingsRate.toFixed(1) + '%';
+        }
+        
+        calculate();
+    </script>
+</body>
+</html>

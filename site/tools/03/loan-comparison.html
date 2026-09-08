@@ -1,0 +1,125 @@
+---
+layout: null
+permalink: /site/tools/03/loan/loan-comparison.html
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loan Comparison</title>
+    <meta name="description" content="Compare two loan offers side by side.">
+    <link rel="stylesheet" href="/site/tools/03/style.css">
+    <script src="/site/tools/03/config.js"></script>
+    {% include head.html %}
+</head>
+<body data-page-name="Loan Comparison" data-category="loan" data-tool-id="loan-comparison">
+    <details>
+        <summary>___</summary>
+        {{content}}
+    </details>
+    
+    <div id="site-header"></div>
+    
+    <main class="main-content">
+        <div id="breadcrumb"></div>
+        
+        <div class="tool-page">
+            <h1>Loan Comparison</h1>
+            <p class="tool-intro" id="toolIntro"></p>
+            
+            <div class="tool-box">
+                <div class="form-grid">
+                    <div>
+                        <label>Loan 1 Amount</label>
+                        <input type="number" id="loan1Amount" value="10000" min="1">
+                    </div>
+                    <div>
+                        <label>Loan 1 Rate (%)</label>
+                        <input type="number" id="loan1Rate" value="6" min="0" step="0.01">
+                    </div>
+                    <div>
+                        <label>Loan 1 Term (Years)</label>
+                        <input type="number" id="loan1Term" value="5" min="1">
+                    </div>
+                    <div class="full-width"></div>
+                    <div>
+                        <label>Loan 2 Amount</label>
+                        <input type="number" id="loan2Amount" value="10000" min="1">
+                    </div>
+                    <div>
+                        <label>Loan 2 Rate (%)</label>
+                        <input type="number" id="loan2Rate" value="7" min="0" step="0.01">
+                    </div>
+                    <div>
+                        <label>Loan 2 Term (Years)</label>
+                        <input type="number" id="loan2Term" value="5" min="1">
+                    </div>
+                </div>
+                
+                <div style="margin-top: 1rem;">
+                    <button class="btn btn-primary" onclick="compare()">Compare</button>
+                </div>
+            </div>
+            
+            <div class="tool-box">
+                <label>Comparison</label>
+                <div class="output-box" id="comparisonOutput">-</div>
+            </div>
+            
+            <div id="ad-content" class="ad-container"></div>
+            
+            <section class="content-section" id="toolExplanation"></section>
+            <section class="content-section" id="toolTips"></section>
+            <section class="content-section" id="toolFAQ"></section>
+            
+            <section class="content-section">
+                <h2>Related Tools</h2>
+                <div class="related-tools" id="related-tools"></div>
+            </section>
+        </div>
+    </main>
+    
+    {% include /ads/gobloggugel/default.html %}
+    {% include footer.html %}
+    
+    <script>
+        function calcLoan(amount, annualRate, years) {
+            const monthlyRate = (annualRate / 100) / 12;
+            const numPayments = years * 12;
+            
+            let payment;
+            if (monthlyRate === 0) {
+                payment = amount / numPayments;
+            } else {
+                payment = amount * monthlyRate * Math.pow(1 + monthlyRate, numPayments) / (Math.pow(1 + monthlyRate, numPayments) - 1);
+            }
+            
+            const total = payment * numPayments;
+            const interest = total - amount;
+            
+            return { payment, total, interest };
+        }
+        
+        function compare() {
+            const loan1 = calcLoan(
+                parseFloat(document.getElementById('loan1Amount').value) || 0,
+                parseFloat(document.getElementById('loan1Rate').value) || 0,
+                parseFloat(document.getElementById('loan1Term').value) || 1
+            );
+            
+            const loan2 = calcLoan(
+                parseFloat(document.getElementById('loan2Amount').value) || 0,
+                parseFloat(document.getElementById('loan2Rate').value) || 0,
+                parseFloat(document.getElementById('loan2Term').value) || 1
+            );
+            
+            const output = `Loan 1:\n  Monthly: ${loan1.payment.toFixed(2)}\n  Total: ${loan1.total.toFixed(2)}\n  Interest: ${loan1.interest.toFixed(2)}\n\nLoan 2:\n  Monthly: ${loan2.payment.toFixed(2)}\n  Total: ${loan2.total.toFixed(2)}\n  Interest: ${loan2.interest.toFixed(2)}\n\nDifference:\n  Monthly: ${(loan2.payment - loan1.payment).toFixed(2)}\n  Total: ${(loan2.total - loan1.total).toFixed(2)}\n  Interest: ${(loan2.interest - loan1.interest).toFixed(2)}`;
+            
+            document.getElementById('comparisonOutput').textContent = output;
+        }
+        
+        compare();
+    </script>
+</body>
+</html>

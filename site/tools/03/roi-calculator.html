@@ -1,0 +1,87 @@
+---
+layout: null
+permalink: /site/tools/03/utility/roi-calculator.html
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROI Calculator</title>
+    <meta name="description" content="Calculate Return on Investment.">
+    <link rel="stylesheet" href="/site/tools/03/style.css">
+    <script src="/site/tools/03/config.js"></script>
+    {% include head.html %}
+</head>
+<body data-page-name="ROI Calculator" data-category="utility" data-tool-id="roi-calculator">
+    <details>
+        <summary>___</summary>
+        {{content}}
+    </details>
+    
+    <div id="site-header"></div>
+    
+    <main class="main-content">
+        <div id="breadcrumb"></div>
+        
+        <div class="tool-page">
+            <h1>ROI Calculator</h1>
+            <p class="tool-intro" id="toolIntro"></p>
+            
+            <div class="tool-box">
+                <div class="form-grid">
+                    <div>
+                        <label>Investment Amount</label>
+                        <input type="number" id="investment" value="10000" min="0" step="0.01">
+                    </div>
+                    <div>
+                        <label>Return Amount</label>
+                        <input type="number" id="returnAmount" value="15000" min="0" step="0.01">
+                    </div>
+                </div>
+                
+                <div style="margin-top: 1rem;">
+                    <button class="btn btn-primary" onclick="calculate()">Calculate</button>
+                </div>
+            </div>
+            
+            <div class="tool-box">
+                <label>Results</label>
+                <div class="stats">
+                    <div class="stat-card"><div class="stat-number" id="netProfit">-</div><div class="stat-label">Net Profit</div></div>
+                    <div class="stat-card"><div class="stat-number" id="roiPercent">-</div><div class="stat-label">ROI %</div></div>
+                </div>
+            </div>
+            
+            <div id="ad-content" class="ad-container"></div>
+            
+            <section class="content-section" id="toolExplanation"></section>
+            <section class="content-section" id="toolTips"></section>
+            <section class="content-section" id="toolFAQ"></section>
+            
+            <section class="content-section">
+                <h2>Related Tools</h2>
+                <div class="related-tools" id="related-tools"></div>
+            </section>
+        </div>
+    </main>
+    
+    {% include /ads/gobloggugel/default.html %}
+    {% include footer.html %}
+    
+    <script>
+        function calculate() {
+            const investment = parseFloat(document.getElementById('investment').value) || 0;
+            const returnAmount = parseFloat(document.getElementById('returnAmount').value) || 0;
+            
+            const netProfit = returnAmount - investment;
+            const roi = investment > 0 ? (netProfit / investment) * 100 : 0;
+            
+            document.getElementById('netProfit').textContent = netProfit.toFixed(2);
+            document.getElementById('roiPercent').textContent = roi.toFixed(2) + '%';
+        }
+        
+        calculate();
+    </script>
+</body>
+</html>

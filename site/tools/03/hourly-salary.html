@@ -1,0 +1,95 @@
+---
+layout: null
+permalink: /site/tools/03/utility/hourly-salary.html
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hourly to Salary Converter</title>
+    <meta name="description" content="Convert hourly rate to annual salary.">
+    <link rel="stylesheet" href="/site/tools/03/style.css">
+    <script src="/site/tools/03/config.js"></script>
+    {% include head.html %}
+</head>
+<body data-page-name="Hourly to Salary" data-category="utility" data-tool-id="hourly-salary">
+    <details>
+        <summary>___</summary>
+        {{content}}
+    </details>
+    
+    <div id="site-header"></div>
+    
+    <main class="main-content">
+        <div id="breadcrumb"></div>
+        
+        <div class="tool-page">
+            <h1>Hourly to Salary Converter</h1>
+            <p class="tool-intro" id="toolIntro"></p>
+            
+            <div class="tool-box">
+                <div class="form-grid">
+                    <div>
+                        <label>Hourly Rate</label>
+                        <input type="number" id="hourlyRate" value="25" min="0" step="0.01">
+                    </div>
+                    <div>
+                        <label>Hours per Week</label>
+                        <input type="number" id="hoursPerWeek" value="40" min="1" max="80">
+                    </div>
+                    <div>
+                        <label>Weeks per Year</label>
+                        <input type="number" id="weeksPerYear" value="52" min="1" max="52">
+                    </div>
+                </div>
+                
+                <div style="margin-top: 1rem;">
+                    <button class="btn btn-primary" onclick="calculate()">Calculate</button>
+                </div>
+            </div>
+            
+            <div class="tool-box">
+                <label>Results</label>
+                <div class="stats">
+                    <div class="stat-card"><div class="stat-number" id="annualSalary">-</div><div class="stat-label">Annual Salary</div></div>
+                    <div class="stat-card"><div class="stat-number" id="weeklyPay">-</div><div class="stat-label">Weekly Pay</div></div>
+                    <div class="stat-card"><div class="stat-number" id="monthlyPay">-</div><div class="stat-label">Monthly Pay</div></div>
+                </div>
+            </div>
+            
+            <div id="ad-content" class="ad-container"></div>
+            
+            <section class="content-section" id="toolExplanation"></section>
+            <section class="content-section" id="toolTips"></section>
+            <section class="content-section" id="toolFAQ"></section>
+            
+            <section class="content-section">
+                <h2>Related Tools</h2>
+                <div class="related-tools" id="related-tools"></div>
+            </section>
+        </div>
+    </main>
+    
+    {% include /ads/gobloggugel/default.html %}
+    {% include footer.html %}
+    
+    <script>
+        function calculate() {
+            const hourly = parseFloat(document.getElementById('hourlyRate').value) || 0;
+            const hours = parseFloat(document.getElementById('hoursPerWeek').value) || 40;
+            const weeks = parseFloat(document.getElementById('weeksPerYear').value) || 52;
+            
+            const weekly = hourly * hours;
+            const annual = weekly * weeks;
+            const monthly = annual / 12;
+            
+            document.getElementById('annualSalary').textContent = annual.toFixed(2);
+            document.getElementById('weeklyPay').textContent = weekly.toFixed(2);
+            document.getElementById('monthlyPay').textContent = monthly.toFixed(2);
+        }
+        
+        calculate();
+    </script>
+</body>
+</html>

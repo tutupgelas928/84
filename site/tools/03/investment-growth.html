@@ -1,0 +1,110 @@
+---
+layout: null
+permalink: /site/tools/03/investment/investment-growth.html
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Investment Growth Calculator</title>
+    <meta name="description" content="Project investment growth over time.">
+    <link rel="stylesheet" href="/site/tools/03/style.css">
+    <script src="/site/tools/03/config.js"></script>
+    {% include head.html %}
+</head>
+<body data-page-name="Investment Growth" data-category="investment" data-tool-id="investment-growth">
+    <details>
+        <summary>___</summary>
+        {{content}}
+    </details>
+    
+    <div id="site-header"></div>
+    
+    <main class="main-content">
+        <div id="breadcrumb"></div>
+        
+        <div class="tool-page">
+            <h1>Investment Growth Calculator</h1>
+            <p class="tool-intro" id="toolIntro"></p>
+            
+            <div class="tool-box">
+                <div class="form-grid">
+                    <div>
+                        <label>Initial Investment</label>
+                        <input type="number" id="initial" value="10000" min="0">
+                    </div>
+                    <div>
+                        <label>Monthly Contribution</label>
+                        <input type="number" id="monthly" value="200" min="0">
+                    </div>
+                    <div>
+                        <label>Annual Return (%)</label>
+                        <input type="number" id="annualRate" value="8" min="0" step="0.01">
+                    </div>
+                    <div>
+                        <label>Years</label>
+                        <input type="number" id="years" value="10" min="1">
+                    </div>
+                </div>
+                
+                <div style="margin-top: 1rem;">
+                    <button class="btn btn-primary" onclick="calculate()">Calculate</button>
+                </div>
+            </div>
+            
+            <div class="tool-box">
+                <label>Results</label>
+                <div class="stats">
+                    <div class="stat-card"><div class="stat-number" id="totalInvested">-</div><div class="stat-label">Invested</div></div>
+                    <div class="stat-card"><div class="stat-number" id="finalValue">-</div><div class="stat-label">Final Value</div></div>
+                    <div class="stat-card"><div class="stat-number" id="growth">-</div><div class="stat-label">Growth</div></div>
+                </div>
+            </div>
+            
+            <div id="ad-content" class="ad-container"></div>
+            
+            <section class="content-section" id="toolExplanation"></section>
+            <section class="content-section" id="toolTips"></section>
+            <section class="content-section" id="toolFAQ"></section>
+            
+            <section class="content-section">
+                <h2>Related Tools</h2>
+                <div class="related-tools" id="related-tools"></div>
+            </section>
+        </div>
+    </main>
+    
+    {% include /ads/gobloggugel/default.html %}
+    {% include footer.html %}
+    
+    <script>
+        function calculate() {
+            const initial = parseFloat(document.getElementById('initial').value) || 0;
+            const monthly = parseFloat(document.getElementById('monthly').value) || 0;
+            const annualRate = parseFloat(document.getElementById('annualRate').value) || 0;
+            const years = parseInt(document.getElementById('years').value) || 1;
+            
+            const monthlyRate = annualRate / 100 / 12;
+            const months = years * 12;
+            
+            let finalValue = initial * Math.pow(1 + monthlyRate, months);
+            
+            if (monthlyRate === 0) {
+                finalValue += monthly * months;
+            } else {
+                finalValue += monthly * (Math.pow(1 + monthlyRate, months) - 1) / monthlyRate;
+            }
+            
+            const totalInvested = initial + monthly * months;
+            const growth = finalValue - totalInvested;
+            
+            document.getElementById('totalInvested').textContent = totalInvested.toFixed(2);
+            document.getElementById('finalValue').textContent = finalValue.toFixed(2);
+            document.getElementById('growth').textContent = growth.toFixed(2);
+        }
+        
+        calculate();
+    </script>
+</body>
+</html>

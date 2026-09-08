@@ -1,0 +1,94 @@
+---
+layout: null
+permalink: /site/tools/03/contact.html
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact</title>
+    <meta name="description" content="Contact us via WhatsApp or email.">
+    <link rel="stylesheet" href="/site/tools/03/style.css">
+    <script src="/site/tools/03/config.js"></script>
+    {% include head.html %}
+</head>
+<body data-page-name="Contact">
+    <details>
+        <summary>___</summary>
+        {{content}}
+    </details>
+    
+    <div id="site-header"></div>
+    
+    <main class="main-content">
+        <div id="breadcrumb"></div>
+        
+        <div class="tool-page">
+            <h1>Contact</h1>
+            <p class="tool-intro">Have a question, suggestion, or feedback? We'd love to hear from you.</p>
+            
+            <section class="content-section">
+                <h2>Contact Options</h2>
+                <p>Choose the method that works best for you:</p>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 1.5rem;">
+                    <!-- WhatsApp Card -->
+                    <div style="text-align: center; padding: 2rem; background: var(--bg); border-radius: 12px; border: 1px solid var(--border);">
+                        <div style="margin-bottom: 1rem;">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="#25D366" stroke="none">
+                                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                            </svg>
+                        </div>
+                        <h3 style="margin-bottom: 0.5rem;">WhatsApp</h3>
+                        <p style="color: var(--text-light); margin-bottom: 1rem;">Fast response during business hours</p>
+                        <a href="https://wa.me/6285770366055" target="_blank" rel="noopener" class="btn btn-primary" style="text-decoration: none; display: inline-block;">
+                            Chat via WhatsApp
+                        </a>
+                    </div>
+                    
+                    <!-- Email Card -->
+                    <div style="text-align: center; padding: 2rem; background: var(--bg); border-radius: 12px; border: 1px solid var(--border);">
+                        <div style="margin-bottom: 1rem;">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                                <polyline points="22,6 12,13 2,6"></polyline>
+                            </svg>
+                        </div>
+                        <h3 style="margin-bottom: 0.5rem;">Email</h3>
+                        <p style="color: var(--text-light); margin-bottom: 1rem;">For detailed inquiries and feedback</p>
+                        <a href="mailto:r.fazriansyah@gmail.com" class="btn btn-primary" style="text-decoration: none; display: inline-block;">
+                            Send Email
+                        </a>
+                    </div>
+                </div>
+            </section>
+            
+            <section class="content-section">
+                <h2>Response Time</h2>
+                <p>We aim to respond within <strong>24-48 hours</strong>.</p>
+                <p>For urgent matters, WhatsApp is the fastest way to reach us.</p>
+            </section>
+            
+            <section class="content-section">
+                <h2>FAQ</h2>
+                <div class="faq-item">
+                    <h3>Are the tools free?</h3>
+                    <p>Yes! All tools are 100% free.</p>
+                </div>
+                <div class="faq-item">
+                    <h3>Do you store my data?</h3>
+                    <p>No. All tools run entirely in your browser.</p>
+                </div>
+                <div class="faq-item">
+                    <h3>Can I suggest a new tool?</h3>
+                    <p>Send us your ideas via WhatsApp or email.</p>
+                </div>
+            </section>
+        </div>
+    </main>
+    
+    {% include /ads/gobloggugel/default.html %}
+    {% include footer.html %}
+</body>
+</html>

@@ -1,0 +1,124 @@
+---
+layout: null
+permalink: /site/tools/03/loan/mortgage-calculator.html
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mortgage Calculator</title>
+    <meta name="description" content="Estimate monthly mortgage payments including principal and interest.">
+    <link rel="stylesheet" href="/site/tools/03/style.css">
+    <script src="/site/tools/03/config.js"></script>
+    {% include head.html %}
+</head>
+<body data-page-name="Mortgage Calculator" data-category="loan" data-tool-id="mortgage-calculator">
+    <details>
+        <summary>___</summary>
+        {{content}}
+    </details>
+    
+    <div id="site-header"></div>
+    
+    <main class="main-content">
+        <div id="breadcrumb"></div>
+        
+        <div class="tool-page">
+            <h1>Mortgage Calculator</h1>
+            <p class="tool-intro" id="toolIntro"></p>
+            
+            <div class="tool-box">
+                <div class="form-grid">
+                    <div>
+                        <label>Home Price</label>
+                        <input type="number" id="homePrice" value="300000" min="1">
+                    </div>
+                    <div>
+                        <label>Down Payment (%)</label>
+                        <input type="number" id="downPayment" value="20" min="0" max="100">
+                    </div>
+                    <div>
+                        <label>Interest Rate (%)</label>
+                        <input type="number" id="interestRate" value="4.5" min="0" step="0.01">
+                    </div>
+                    <div>
+                        <label>Loan Term (Years)</label>
+                        <input type="number" id="loanTerm" value="30" min="1">
+                    </div>
+                    <div>
+                        <label>Property Tax (Annual)</label>
+                        <input type="number" id="propertyTax" value="3600" min="0">
+                    </div>
+                    <div>
+                        <label>Insurance (Annual)</label>
+                        <input type="number" id="insurance" value="1200" min="0">
+                    </div>
+                </div>
+                
+                <div style="margin-top: 1rem;">
+                    <button class="btn btn-primary" onclick="calculate()">Calculate</button>
+                </div>
+            </div>
+            
+            <div class="tool-box">
+                <label>Results</label>
+                <div class="stats">
+                    <div class="stat-card"><div class="stat-number" id="principalInterest">-</div><div class="stat-label">P&I</div></div>
+                    <div class="stat-card"><div class="stat-number" id="taxInsurance">-</div><div class="stat-label">Tax+Ins</div></div>
+                    <div class="stat-card"><div class="stat-number" id="totalMonthly">-</div><div class="stat-label">Total</div></div>
+                    <div class="stat-card"><div class="stat-number" id="totalInterest">-</div><div class="stat-label">Total Interest</div></div>
+                </div>
+            </div>
+            
+            <div id="ad-content" class="ad-container"></div>
+            
+            <section class="content-section" id="toolExplanation"></section>
+            <section class="content-section" id="toolTips"></section>
+            <section class="content-section" id="toolFAQ"></section>
+            
+            <section class="content-section">
+                <h2>Related Tools</h2>
+                <div class="related-tools" id="related-tools"></div>
+            </section>
+        </div>
+    </main>
+    
+    {% include /ads/gobloggugel/default.html %}
+    {% include footer.html %}
+    
+    <script>
+        function calculate() {
+            const homePrice = parseFloat(document.getElementById('homePrice').value) || 0;
+            const downPct = parseFloat(document.getElementById('downPayment').value) || 0;
+            const annualRate = parseFloat(document.getElementById('interestRate').value) || 0;
+            const years = parseFloat(document.getElementById('loanTerm').value) || 30;
+            const propTax = parseFloat(document.getElementById('propertyTax').value) || 0;
+            const insurance = parseFloat(document.getElementById('insurance').value) || 0;
+            
+            const downAmount = homePrice * (downPct / 100);
+            const loanAmount = homePrice - downAmount;
+            const monthlyRate = (annualRate / 100) / 12;
+            const numPayments = years * 12;
+            
+            let monthlyPI;
+            if (monthlyRate === 0) {
+                monthlyPI = loanAmount / numPayments;
+            } else {
+                monthlyPI = loanAmount * monthlyRate * Math.pow(1 + monthlyRate, numPayments) / (Math.pow(1 + monthlyRate, numPayments) - 1);
+            }
+            
+            const monthlyTaxIns = (propTax + insurance) / 12;
+            const totalMonthly = monthlyPI + monthlyTaxIns;
+            const totalInterest = (monthlyPI * numPayments) - loanAmount;
+            
+            document.getElementById('principalInterest').textContent = monthlyPI.toFixed(2);
+            document.getElementById('taxInsurance').textContent = monthlyTaxIns.toFixed(2);
+            document.getElementById('totalMonthly').textContent = totalMonthly.toFixed(2);
+            document.getElementById('totalInterest').textContent = totalInterest.toFixed(2);
+        }
+        
+        calculate();
+    </script>
+</body>
+</html>

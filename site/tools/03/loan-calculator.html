@@ -1,0 +1,120 @@
+---
+layout: null
+permalink: /site/tools/03/loan/loan-calculator.html
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loan Calculator</title>
+    <meta name="description" content="Calculate monthly loan payments with interest and amortization.">
+    <link rel="stylesheet" href="/site/tools/03/style.css">
+    <script src="/site/tools/03/config.js"></script>
+    {% include head.html %}
+</head>
+<body data-page-name="Loan Calculator" data-category="loan" data-tool-id="loan-calculator">
+    <details>
+        <summary>___</summary>
+        {{content}}
+    </details>
+    
+    <div id="site-header"></div>
+    
+    <main class="main-content">
+        <div id="breadcrumb"></div>
+        
+        <div class="tool-page">
+            <h1>Loan Calculator</h1>
+            <p class="tool-intro" id="toolIntro"></p>
+            
+            <div class="tool-box">
+                <div class="form-grid">
+                    <div>
+                        <label>Loan Amount</label>
+                        <input type="number" id="loanAmount" value="10000" min="1">
+                    </div>
+                    <div>
+                        <label>Annual Interest Rate (%)</label>
+                        <input type="number" id="interestRate" value="6" min="0" step="0.01">
+                    </div>
+                    <div>
+                        <label>Loan Term (Years)</label>
+                        <input type="number" id="loanTerm" value="5" min="1">
+                    </div>
+                    <div>
+                        <label>Payment Frequency</label>
+                        <select id="paymentFrequency">
+                            <option value="12">Monthly</option>
+                            <option value="26">Bi-weekly</option>
+                            <option value="52">Weekly</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 1rem;">
+                    <button class="btn btn-primary" onclick="calculate()">Calculate</button>
+                </div>
+            </div>
+            
+            <div class="tool-box">
+                <label>Results</label>
+                <div class="stats">
+                    <div class="stat-card"><div class="stat-number" id="monthlyPayment">-</div><div class="stat-label">Payment</div></div>
+                    <div class="stat-card"><div class="stat-number" id="totalPayment">-</div><div class="stat-label">Total Paid</div></div>
+                    <div class="stat-card"><div class="stat-number" id="totalInterest">-</div><div class="stat-label">Total Interest</div></div>
+                    <div class="stat-card"><div class="stat-number" id="numPayments">-</div><div class="stat-label">Payments</div></div>
+                </div>
+            </div>
+            
+            <div id="ad-content" class="ad-container"></div>
+            
+            <section class="content-section" id="toolExplanation"></section>
+            <section class="content-section" id="toolTips"></section>
+            <section class="content-section" id="toolFAQ"></section>
+            
+            <section class="content-section">
+                <h2>Related Tools</h2>
+                <div class="related-tools" id="related-tools"></div>
+            </section>
+        </div>
+    </main>
+    
+    {% include /ads/gobloggugel/default.html %}
+    {% include footer.html %}
+    
+    <script>
+        function calculate() {
+            const amount = parseFloat(document.getElementById('loanAmount').value) || 0;
+            const annualRate = parseFloat(document.getElementById('interestRate').value) || 0;
+            const years = parseFloat(document.getElementById('loanTerm').value) || 1;
+            const freq = parseInt(document.getElementById('paymentFrequency').value);
+            
+            if (amount <= 0 || annualRate < 0 || years <= 0) {
+                alert('Please enter valid values.');
+                return;
+            }
+            
+            const ratePerPeriod = (annualRate / 100) / freq;
+            const numPayments = years * freq;
+            
+            let payment;
+            if (ratePerPeriod === 0) {
+                payment = amount / numPayments;
+            } else {
+                payment = amount * ratePerPeriod * Math.pow(1 + ratePerPeriod, numPayments) / (Math.pow(1 + ratePerPeriod, numPayments) - 1);
+            }
+            
+            const totalPayment = payment * numPayments;
+            const totalInterest = totalPayment - amount;
+            
+            document.getElementById('monthlyPayment').textContent = payment.toFixed(2);
+            document.getElementById('totalPayment').textContent = totalPayment.toFixed(2);
+            document.getElementById('totalInterest').textContent = totalInterest.toFixed(2);
+            document.getElementById('numPayments').textContent = numPayments;
+        }
+        
+        calculate();
+    </script>
+</body>
+</html>

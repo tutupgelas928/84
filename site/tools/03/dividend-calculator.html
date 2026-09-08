@@ -1,0 +1,97 @@
+---
+layout: null
+permalink: /site/tools/03/investment/dividend-calculator.html
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dividend Calculator</title>
+    <meta name="description" content="Calculate dividend income from stock investments.">
+    <link rel="stylesheet" href="/site/tools/03/style.css">
+    <script src="/site/tools/03/config.js"></script>
+    {% include head.html %}
+</head>
+<body data-page-name="Dividend Calculator" data-category="investment" data-tool-id="dividend-calculator">
+    <details>
+        <summary>___</summary>
+        {{content}}
+    </details>
+    
+    <div id="site-header"></div>
+    
+    <main class="main-content">
+        <div id="breadcrumb"></div>
+        
+        <div class="tool-page">
+            <h1>Dividend Calculator</h1>
+            <p class="tool-intro" id="toolIntro"></p>
+            
+            <div class="tool-box">
+                <div class="form-grid">
+                    <div>
+                        <label>Dividend per Share</label>
+                        <input type="number" id="dividendPerShare" value="2" min="0" step="0.01">
+                    </div>
+                    <div>
+                        <label>Number of Shares</label>
+                        <input type="number" id="shares" value="100" min="1">
+                    </div>
+                    <div>
+                        <label>Dividend Frequency</label>
+                        <select id="frequency">
+                            <option value="1">Annually</option>
+                            <option value="2">Semi-annually</option>
+                            <option value="4" selected>Quarterly</option>
+                            <option value="12">Monthly</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 1rem;">
+                    <button class="btn btn-primary" onclick="calculate()">Calculate</button>
+                </div>
+            </div>
+            
+            <div class="tool-box">
+                <label>Results</label>
+                <div class="stats">
+                    <div class="stat-card"><div class="stat-number" id="perPeriod">-</div><div class="stat-label">Per Period</div></div>
+                    <div class="stat-card"><div class="stat-number" id="annualIncome">-</div><div class="stat-label">Annual Income</div></div>
+                </div>
+            </div>
+            
+            <div id="ad-content" class="ad-container"></div>
+            
+            <section class="content-section" id="toolExplanation"></section>
+            <section class="content-section" id="toolTips"></section>
+            <section class="content-section" id="toolFAQ"></section>
+            
+            <section class="content-section">
+                <h2>Related Tools</h2>
+                <div class="related-tools" id="related-tools"></div>
+            </section>
+        </div>
+    </main>
+    
+    {% include /ads/gobloggugel/default.html %}
+    {% include footer.html %}
+    
+    <script>
+        function calculate() {
+            const dividendPerShare = parseFloat(document.getElementById('dividendPerShare').value) || 0;
+            const shares = parseInt(document.getElementById('shares').value) || 0;
+            const frequency = parseInt(document.getElementById('frequency').value);
+            
+            const perPeriod = dividendPerShare * shares / frequency;
+            const annualIncome = dividendPerShare * shares;
+            
+            document.getElementById('perPeriod').textContent = perPeriod.toFixed(2);
+            document.getElementById('annualIncome').textContent = annualIncome.toFixed(2);
+        }
+        
+        calculate();
+    </script>
+</body>
+</html>

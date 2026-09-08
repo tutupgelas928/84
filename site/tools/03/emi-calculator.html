@@ -1,0 +1,103 @@
+---
+layout: null
+permalink: /site/tools/03/loan/emi-calculator.html
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EMI Calculator</title>
+    <meta name="description" content="Calculate Equated Monthly Installments for any loan.">
+    <link rel="stylesheet" href="/site/tools/03/style.css">
+    <script src="/site/tools/03/config.js"></script>
+    {% include head.html %}
+</head>
+<body data-page-name="EMI Calculator" data-category="loan" data-tool-id="emi-calculator">
+    <details>
+        <summary>___</summary>
+        {{content}}
+    </details>
+    
+    <div id="site-header"></div>
+    
+    <main class="main-content">
+        <div id="breadcrumb"></div>
+        
+        <div class="tool-page">
+            <h1>EMI Calculator</h1>
+            <p class="tool-intro" id="toolIntro"></p>
+            
+            <div class="tool-box">
+                <div class="form-grid">
+                    <div>
+                        <label>Loan Amount</label>
+                        <input type="number" id="loanAmount" value="50000" min="1">
+                    </div>
+                    <div>
+                        <label>Interest Rate (% per year)</label>
+                        <input type="number" id="interestRate" value="8" min="0" step="0.01">
+                    </div>
+                    <div>
+                        <label>Tenure (Months)</label>
+                        <input type="number" id="tenure" value="60" min="1">
+                    </div>
+                </div>
+                
+                <div style="margin-top: 1rem;">
+                    <button class="btn btn-primary" onclick="calculate()">Calculate EMI</button>
+                </div>
+            </div>
+            
+            <div class="tool-box">
+                <label>Results</label>
+                <div class="stats">
+                    <div class="stat-card"><div class="stat-number" id="emi">-</div><div class="stat-label">EMI</div></div>
+                    <div class="stat-card"><div class="stat-number" id="totalPayment">-</div><div class="stat-label">Total</div></div>
+                    <div class="stat-card"><div class="stat-number" id="totalInterest">-</div><div class="stat-label">Interest</div></div>
+                </div>
+            </div>
+            
+            <div id="ad-content" class="ad-container"></div>
+            
+            <section class="content-section" id="toolExplanation"></section>
+            <section class="content-section" id="toolTips"></section>
+            <section class="content-section" id="toolFAQ"></section>
+            
+            <section class="content-section">
+                <h2>Related Tools</h2>
+                <div class="related-tools" id="related-tools"></div>
+            </section>
+        </div>
+    </main>
+    
+    {% include /ads/gobloggugel/default.html %}
+    {% include footer.html %}
+    
+    <script>
+        function calculate() {
+            const amount = parseFloat(document.getElementById('loanAmount').value) || 0;
+            const annualRate = parseFloat(document.getElementById('interestRate').value) || 0;
+            const months = parseInt(document.getElementById('tenure').value) || 1;
+            
+            const monthlyRate = (annualRate / 100) / 12;
+            
+            let emi;
+            if (monthlyRate === 0) {
+                emi = amount / months;
+            } else {
+                emi = amount * monthlyRate * Math.pow(1 + monthlyRate, months) / (Math.pow(1 + monthlyRate, months) - 1);
+            }
+            
+            const total = emi * months;
+            const interest = total - amount;
+            
+            document.getElementById('emi').textContent = emi.toFixed(2);
+            document.getElementById('totalPayment').textContent = total.toFixed(2);
+            document.getElementById('totalInterest').textContent = interest.toFixed(2);
+        }
+        
+        calculate();
+    </script>
+</body>
+</html>

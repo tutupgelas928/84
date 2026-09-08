@@ -1,1 +1,47 @@
-
+---
+layout: null
+permalink: /site/tools/03/index.html
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <meta name="description" content="Free financial calculators. Loans, investments, tax, and more.">
+    <link rel="stylesheet" href="/site/tools/03/style.css">
+    <script src="/site/tools/03/config.js"></script>
+    {% include head.html %}
+</head>
+<body data-page-name="Dashboard">
+    <details>
+        <summary>___</summary>
+        {{content}}
+    </details>
+    
+    <div id="site-header"></div>
+    
+    <main class="main-content">
+        <section class="hero">
+            <h1>Finance Tools Suite</h1>
+            <p>30+ free financial calculators. No signup required.</p>
+            <span class="hero-badge">100% Private · Instant · Free</span>
+        </section>
+        
+        <div id="ad-header" class="ad-container"></div>
+        
+        <div id="category-tabs"></div>
+        
+        <h2 class="section-title">Categories</h2>
+        <div class="category-grid" id="category-grid"></div>
+        
+        <h2 class="section-title">All Tools</h2>
+        <div class="tools-grid" id="tools-grid"></div>
+        
+        <div id="ad-footer" class="ad-container"></div>
+    </main>
+    
+    {% include /ads/gobloggugel/default.html %}
+    {% include footer.html %}
+</body>
+</html>
