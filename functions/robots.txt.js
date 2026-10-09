@@ -1,19 +1,19 @@
-export async function onRequest(context) {
-  const host = new URL(context.request.url).hostname;
-
-  return new Response(
-`User-agent: *
-Disallow: /test/
-Disallow: /assets/
+export async function onRequestGet(context) {
+  const host = context.request.headers.get("host");
+  
+  const body = `User-agent: *
 Allow: /
 
-Sitemap: https://${host}/sitemap.xml
-`,
-    {
-      headers: {
-        "Content-Type": "text/plain; charset=UTF-8",
-        "Cache-Control": "public, max-age=5184000"
-      }
+Sitemap: https://${host}/sitemap/01/sitemap34.xml
+
+`;
+
+  return new Response(body, {
+    headers: {
+      "Content-Type": "text/plain; charset=UTF-8",
+      "Cache-Control": "no-cache, no-store, must-revalidate",
+      "Pragma": "no-cache",
+      "Expires": "0"
     }
-  );
+  });
 }
